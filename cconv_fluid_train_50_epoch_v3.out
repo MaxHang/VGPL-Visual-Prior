@@ -1,0 +1,463 @@
+- Overwrite config params ['loss_type', 'dataset', 'run_dir', 'n_frames_eval', 'group_loss_weight', 'vis_frames_per_sample', 'batch_size', 'n_epochs'].
+- Configuration:
+batch_size: 50
+batchnorm: True
+conv_temp_encoder: False
+dataset: CConvFluid
+debug: False
+group_loss_weight: 0.0
+load_path: 
+log_eval: True
+loss_type: l2
+lr: 0.0001
+n_epochs: 50
+n_frames: 4
+n_frames_eval: 10
+pred_hidden: 2048
+recur_pred: False
+run_dir: /workspace/VGPL-Visual-Prior/experiments/cconv_fluid_v3
+single_out: False
+temp_embedding_size: 1024
+temp_reg_lam: 0.0
+use_temp_encoder: False
+vis: True
+vis_eval: True
+vis_eval_every: 50
+vis_every: 5
+vis_frames_per_sample: 10
+vis_samples: 5
+- Model architecture:
+PointSetNet(
+  (encoder): Encoder(
+    (net): Sequential(
+      (0): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(12, 32, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(32, 64, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (1): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (2): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (3): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+    )
+  )
+  (predictor): Predictor(
+    (pos_head): Sequential(
+      (0): Linear(in_features=5120, out_features=2048, bias=True)
+      (1): Linear(in_features=2048, out_features=72000, bias=True)
+    )
+    (group_head): Sequential(
+      (0): Linear(in_features=5120, out_features=2048, bias=True)
+      (1): Linear(in_features=2048, out_features=24000, bias=True)
+    )
+  )
+)
+- Training start
+- Training epoch 0
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.351449:   0%|          | 0/4 [00:49<?, ?it/s]Train loss 0.351449:  25%|██▌       | 1/4 [00:49<02:27, 49.19s/it]Train loss 0.142413:  25%|██▌       | 1/4 [01:35<02:27, 49.19s/it]Train loss 0.142413:  50%|█████     | 2/4 [01:35<01:34, 47.30s/it]Train loss 0.138095:  50%|█████     | 2/4 [02:23<01:34, 47.30s/it]Train loss 0.138095:  75%|███████▌  | 3/4 [02:23<00:47, 47.67s/it]Train loss 0.131301:  75%|███████▌  | 3/4 [03:08<00:47, 47.67s/it]Train loss 0.131301: 100%|██████████| 4/4 [03:08<00:00, 46.79s/it]Train loss 0.131301: 100%|██████████| 4/4 [03:08<00:00, 47.18s/it]
+- Finish training epoch 0, training loss 0.190814, pos loss 0.190814, group loss 0.000000
+- Evaluating epoch 0
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.146633:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.146633: 100%|██████████| 1/1 [00:17<00:00, 17.80s/it]Valid loss 0.146633: 100%|██████████| 1/1 [00:17<00:00, 17.80s/it]
+- Finish eval epoch 0, validation loss 0.146633
+- Best model
+
+- Training epoch 1
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.122430:   0%|          | 0/4 [00:46<?, ?it/s]Train loss 0.122430:  25%|██▌       | 1/4 [00:46<02:19, 46.48s/it]Train loss 0.123261:  25%|██▌       | 1/4 [01:30<02:19, 46.48s/it]Train loss 0.123261:  50%|█████     | 2/4 [01:30<01:30, 45.21s/it]Train loss 0.102656:  50%|█████     | 2/4 [02:15<01:30, 45.21s/it]Train loss 0.102656:  75%|███████▌  | 3/4 [02:15<00:45, 45.08s/it]Train loss 0.101641:  75%|███████▌  | 3/4 [02:58<00:45, 45.08s/it]Train loss 0.101641: 100%|██████████| 4/4 [02:58<00:00, 44.17s/it]Train loss 0.101641: 100%|██████████| 4/4 [02:58<00:00, 44.62s/it]
+- Finish training epoch 1, training loss 0.112497, pos loss 0.112497, group loss 0.000000
+- Evaluating epoch 1
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.129761:   0%|          | 0/1 [00:16<?, ?it/s]Valid loss 0.129761: 100%|██████████| 1/1 [00:16<00:00, 16.65s/it]Valid loss 0.129761: 100%|██████████| 1/1 [00:16<00:00, 16.65s/it]
+- Finish eval epoch 1, validation loss 0.129761
+- Best model
+
+- Training epoch 2
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.096979:   0%|          | 0/4 [00:46<?, ?it/s]Train loss 0.096979:  25%|██▌       | 1/4 [00:46<02:18, 46.31s/it]Train loss 0.105307:  25%|██▌       | 1/4 [01:32<02:18, 46.31s/it]Train loss 0.105307:  50%|█████     | 2/4 [01:32<01:31, 45.95s/it]Train loss 0.098837:  50%|█████     | 2/4 [02:17<01:31, 45.95s/it]Train loss 0.098837:  75%|███████▌  | 3/4 [02:17<00:45, 45.73s/it]Train loss 0.093057:  75%|███████▌  | 3/4 [03:04<00:45, 45.73s/it]Train loss 0.093057: 100%|██████████| 4/4 [03:04<00:00, 46.24s/it]Train loss 0.093057: 100%|██████████| 4/4 [03:04<00:00, 46.12s/it]
+- Finish training epoch 2, training loss 0.098545, pos loss 0.098545, group loss 0.000000
+- Evaluating epoch 2
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.130634:   0%|          | 0/1 [00:16<?, ?it/s]Valid loss 0.130634: 100%|██████████| 1/1 [00:16<00:00, 16.92s/it]Valid loss 0.130634: 100%|██████████| 1/1 [00:16<00:00, 16.92s/it]
+- Finish eval epoch 2, validation loss 0.130634
+
+- Training epoch 3
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.090103:   0%|          | 0/4 [00:47<?, ?it/s]Train loss 0.090103:  25%|██▌       | 1/4 [00:47<02:21, 47.28s/it]Train loss 0.088912:  25%|██▌       | 1/4 [01:33<02:21, 47.28s/it]Train loss 0.088912:  50%|█████     | 2/4 [01:33<01:33, 46.64s/it]Train loss 0.089167:  50%|█████     | 2/4 [02:20<01:33, 46.64s/it]Train loss 0.089167:  75%|███████▌  | 3/4 [02:20<00:47, 47.03s/it]Train loss 0.092654:  75%|███████▌  | 3/4 [03:07<00:47, 47.03s/it]Train loss 0.092654: 100%|██████████| 4/4 [03:07<00:00, 46.68s/it]Train loss 0.092654: 100%|██████████| 4/4 [03:07<00:00, 46.78s/it]
+- Finish training epoch 3, training loss 0.090209, pos loss 0.090209, group loss 0.000000
+- Evaluating epoch 3
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.120497:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.120497: 100%|██████████| 1/1 [00:18<00:00, 18.59s/it]Valid loss 0.120497: 100%|██████████| 1/1 [00:18<00:00, 18.59s/it]
+- Finish eval epoch 3, validation loss 0.120497
+- Best model
+
+- Training epoch 4
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.084464:   0%|          | 0/4 [00:45<?, ?it/s]Generating video:   0%|          | 0/4 [00:45<?, ?it/s]   Generating video:  25%|██▌       | 1/4 [01:07<03:21, 67.32s/it]Train loss 0.082282:  25%|██▌       | 1/4 [01:51<03:21, 67.32s/it]Train loss 0.082282:  50%|█████     | 2/4 [01:51<01:47, 53.91s/it]Train loss 0.085931:  50%|█████     | 2/4 [02:44<01:47, 53.91s/it]Train loss 0.085931:  75%|███████▌  | 3/4 [02:44<00:53, 53.39s/it]Train loss 0.088193:  75%|███████▌  | 3/4 [05:06<00:53, 53.39s/it]Train loss 0.088193: 100%|██████████| 4/4 [05:06<00:00, 88.15s/it]Train loss 0.088193: 100%|██████████| 4/4 [05:06<00:00, 76.51s/it]
+- Finish training epoch 4, training loss 0.085217, pos loss 0.085217, group loss 0.000000
+- Evaluating epoch 4
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.120122:   0%|          | 0/1 [01:50<?, ?it/s]Generating video:   0%|          | 0/1 [01:50<?, ?it/s]   Generating video: 100%|██████████| 1/1 [02:10<00:00, 130.39s/it]Generating video: 100%|██████████| 1/1 [02:10<00:00, 130.39s/it]
+- Finish eval epoch 4, validation loss 0.120122
+- Best model
+
+- Training epoch 5
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.080590:   0%|          | 0/4 [02:36<?, ?it/s]Train loss 0.080590:  25%|██▌       | 1/4 [02:36<07:50, 156.69s/it]Train loss 0.078196:  25%|██▌       | 1/4 [04:45<07:50, 156.69s/it]Train loss 0.078196:  50%|█████     | 2/4 [04:45<04:40, 140.17s/it]Train loss 0.076620:  50%|█████     | 2/4 [07:40<04:40, 140.17s/it]Train loss 0.076620:  75%|███████▌  | 3/4 [07:40<02:36, 156.01s/it]Train loss 0.084197:  75%|███████▌  | 3/4 [10:24<02:36, 156.01s/it]Train loss 0.084197: 100%|██████████| 4/4 [10:24<00:00, 159.31s/it]Train loss 0.084197: 100%|██████████| 4/4 [10:24<00:00, 156.13s/it]
+- Finish training epoch 5, training loss 0.079901, pos loss 0.079901, group loss 0.000000
+- Evaluating epoch 5
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.115087:   0%|          | 0/1 [01:16<?, ?it/s]Valid loss 0.115087: 100%|██████████| 1/1 [01:16<00:00, 76.20s/it]Valid loss 0.115087: 100%|██████████| 1/1 [01:16<00:00, 76.20s/it]
+- Finish eval epoch 5, validation loss 0.115087
+- Best model
+
+- Training epoch 6
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.076195:   0%|          | 0/4 [03:31<?, ?it/s]Train loss 0.076195:  25%|██▌       | 1/4 [03:31<10:33, 211.22s/it]Train loss 0.076658:  25%|██▌       | 1/4 [05:30<10:33, 211.22s/it]Train loss 0.076658:  50%|█████     | 2/4 [05:30<05:13, 156.97s/it]Train loss 0.077341:  50%|█████     | 2/4 [07:17<05:13, 156.97s/it]Train loss 0.077341:  75%|███████▌  | 3/4 [07:17<02:14, 134.24s/it]Train loss 0.079271:  75%|███████▌  | 3/4 [09:34<02:14, 134.24s/it]Train loss 0.079271: 100%|██████████| 4/4 [09:34<00:00, 135.42s/it]Train loss 0.079271: 100%|██████████| 4/4 [09:34<00:00, 143.66s/it]
+- Finish training epoch 6, training loss 0.077366, pos loss 0.077366, group loss 0.000000
+- Evaluating epoch 6
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.121654:   0%|          | 0/1 [00:55<?, ?it/s]Valid loss 0.121654: 100%|██████████| 1/1 [00:55<00:00, 55.78s/it]Valid loss 0.121654: 100%|██████████| 1/1 [00:55<00:00, 55.78s/it]
+/workspace/VGPL-Visual-Prior/utils/utils.py:128: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure()
+- Finish eval epoch 6, validation loss 0.121654
+
+- Training epoch 7
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.073478:   0%|          | 0/4 [03:02<?, ?it/s]Train loss 0.073478:  25%|██▌       | 1/4 [03:02<09:06, 182.00s/it]Train loss 0.073209:  25%|██▌       | 1/4 [05:02<09:06, 182.00s/it]Train loss 0.073209:  50%|█████     | 2/4 [05:02<04:51, 145.77s/it]Train loss 0.076191:  50%|█████     | 2/4 [08:26<04:51, 145.77s/it]Train loss 0.076191:  75%|███████▌  | 3/4 [08:26<02:52, 172.61s/it]Train loss 0.070343:  75%|███████▌  | 3/4 [09:19<02:52, 172.61s/it]Train loss 0.070343: 100%|██████████| 4/4 [09:19<00:00, 125.06s/it]Train loss 0.070343: 100%|██████████| 4/4 [09:19<00:00, 139.78s/it]
+- Finish training epoch 7, training loss 0.073305, pos loss 0.073305, group loss 0.000000
+- Evaluating epoch 7
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.118728:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.118728: 100%|██████████| 1/1 [00:18<00:00, 18.42s/it]Valid loss 0.118728: 100%|██████████| 1/1 [00:18<00:00, 18.43s/it]
+- Finish eval epoch 7, validation loss 0.118728
+
+- Training epoch 8
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.065167:   0%|          | 0/4 [00:45<?, ?it/s]Train loss 0.065167:  25%|██▌       | 1/4 [00:45<02:15, 45.02s/it]Train loss 0.069473:  25%|██▌       | 1/4 [01:29<02:15, 45.02s/it]Train loss 0.069473:  50%|█████     | 2/4 [01:29<01:29, 44.97s/it]Train loss 0.066705:  50%|█████     | 2/4 [02:14<01:29, 44.97s/it]Train loss 0.066705:  75%|███████▌  | 3/4 [02:14<00:44, 44.93s/it]Train loss 0.071498:  75%|███████▌  | 3/4 [03:03<00:44, 44.93s/it]Train loss 0.071498: 100%|██████████| 4/4 [03:03<00:00, 46.47s/it]Train loss 0.071498: 100%|██████████| 4/4 [03:03<00:00, 45.92s/it]
+- Finish training epoch 8, training loss 0.068211, pos loss 0.068211, group loss 0.000000
+- Evaluating epoch 8
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.116297:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.116297: 100%|██████████| 1/1 [00:18<00:00, 18.87s/it]Valid loss 0.116297: 100%|██████████| 1/1 [00:18<00:00, 18.87s/it]
+- Finish eval epoch 8, validation loss 0.116297
+
+- Training epoch 9
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.062881:   0%|          | 0/4 [00:47<?, ?it/s]Generating video:   0%|          | 0/4 [00:47<?, ?it/s]   Generating video:  25%|██▌       | 1/4 [01:07<03:22, 67.43s/it]Train loss 0.066544:  25%|██▌       | 1/4 [01:50<03:22, 67.43s/it]Train loss 0.066544:  50%|█████     | 2/4 [01:50<01:46, 53.06s/it]Train loss 0.064119:  50%|█████     | 2/4 [02:33<01:46, 53.06s/it]Train loss 0.064119:  75%|███████▌  | 3/4 [02:33<00:48, 48.71s/it]Train loss 0.063762:  75%|███████▌  | 3/4 [03:17<00:48, 48.71s/it]Train loss 0.063762: 100%|██████████| 4/4 [03:17<00:00, 46.66s/it]Train loss 0.063762: 100%|██████████| 4/4 [03:17<00:00, 49.37s/it]
+- Finish training epoch 9, training loss 0.064327, pos loss 0.064327, group loss 0.000000
+- Evaluating epoch 9
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.120350:   0%|          | 0/1 [00:17<?, ?it/s]Generating video:   0%|          | 0/1 [00:17<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:38<00:00, 38.10s/it]Generating video: 100%|██████████| 1/1 [00:38<00:00, 38.10s/it]
+- Finish eval epoch 9, validation loss 0.120350
+
+- Training epoch 10
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.057155:   0%|          | 0/4 [00:43<?, ?it/s]Train loss 0.057155:  25%|██▌       | 1/4 [00:43<02:09, 43.21s/it]Train loss 0.060602:  25%|██▌       | 1/4 [01:28<02:09, 43.21s/it]Train loss 0.060602:  50%|█████     | 2/4 [01:28<01:29, 44.63s/it]Train loss 0.063766:  50%|█████     | 2/4 [02:13<01:29, 44.63s/it]Train loss 0.063766:  75%|███████▌  | 3/4 [02:13<00:44, 44.85s/it]Train loss 0.063047:  75%|███████▌  | 3/4 [02:59<00:44, 44.85s/it]Train loss 0.063047: 100%|██████████| 4/4 [02:59<00:00, 45.17s/it]Train loss 0.063047: 100%|██████████| 4/4 [02:59<00:00, 44.90s/it]
+- Finish training epoch 10, training loss 0.061143, pos loss 0.061143, group loss 0.000000
+- Evaluating epoch 10
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.116877:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.116877: 100%|██████████| 1/1 [00:17<00:00, 17.53s/it]Valid loss 0.116877: 100%|██████████| 1/1 [00:17<00:00, 17.53s/it]
+- Finish eval epoch 10, validation loss 0.116877
+
+- Training epoch 11
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.054855:   0%|          | 0/4 [00:45<?, ?it/s]Train loss 0.054855:  25%|██▌       | 1/4 [00:45<02:15, 45.30s/it]Train loss 0.056014:  25%|██▌       | 1/4 [01:28<02:15, 45.30s/it]Train loss 0.056014:  50%|█████     | 2/4 [01:28<01:27, 43.86s/it]Train loss 0.058817:  50%|█████     | 2/4 [02:13<01:27, 43.86s/it]Train loss 0.058817:  75%|███████▌  | 3/4 [02:13<00:44, 44.71s/it]Train loss 0.058962:  75%|███████▌  | 3/4 [02:56<00:44, 44.71s/it]Train loss 0.058962: 100%|██████████| 4/4 [02:56<00:00, 43.97s/it]Train loss 0.058962: 100%|██████████| 4/4 [02:56<00:00, 44.18s/it]
+- Finish training epoch 11, training loss 0.057162, pos loss 0.057162, group loss 0.000000
+- Evaluating epoch 11
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.121592:   0%|          | 0/1 [00:16<?, ?it/s]Valid loss 0.121592: 100%|██████████| 1/1 [00:16<00:00, 16.13s/it]Valid loss 0.121592: 100%|██████████| 1/1 [00:16<00:00, 16.13s/it]
+- Finish eval epoch 11, validation loss 0.121592
+
+- Training epoch 12
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.051741:   0%|          | 0/4 [00:45<?, ?it/s]Train loss 0.051741:  25%|██▌       | 1/4 [00:45<02:15, 45.19s/it]Train loss 0.053665:  25%|██▌       | 1/4 [01:27<02:15, 45.19s/it]Train loss 0.053665:  50%|█████     | 2/4 [01:27<01:27, 43.72s/it]Train loss 0.056239:  50%|█████     | 2/4 [02:12<01:27, 43.72s/it]Train loss 0.056239:  75%|███████▌  | 3/4 [02:12<00:44, 44.12s/it]Train loss 0.056255:  75%|███████▌  | 3/4 [02:55<00:44, 44.12s/it]Train loss 0.056255: 100%|██████████| 4/4 [02:55<00:00, 43.78s/it]Train loss 0.056255: 100%|██████████| 4/4 [02:55<00:00, 43.93s/it]
+- Finish training epoch 12, training loss 0.054475, pos loss 0.054475, group loss 0.000000
+- Evaluating epoch 12
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.119095:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.119095: 100%|██████████| 1/1 [00:17<00:00, 17.07s/it]Valid loss 0.119095: 100%|██████████| 1/1 [00:17<00:00, 17.07s/it]
+- Finish eval epoch 12, validation loss 0.119095
+
+- Training epoch 13
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.048220:   0%|          | 0/4 [00:46<?, ?it/s]Train loss 0.048220:  25%|██▌       | 1/4 [00:46<02:18, 46.24s/it]Train loss 0.048495:  25%|██▌       | 1/4 [01:33<02:18, 46.24s/it]Train loss 0.048495:  50%|█████     | 2/4 [01:33<01:33, 46.82s/it]Train loss 0.054001:  50%|█████     | 2/4 [02:20<01:33, 46.82s/it]Train loss 0.054001:  75%|███████▌  | 3/4 [02:20<00:46, 46.90s/it]Train loss 0.056489:  75%|███████▌  | 3/4 [03:09<00:46, 46.90s/it]Train loss 0.056489: 100%|██████████| 4/4 [03:09<00:00, 47.64s/it]Train loss 0.056489: 100%|██████████| 4/4 [03:09<00:00, 47.31s/it]
+- Finish training epoch 13, training loss 0.051801, pos loss 0.051801, group loss 0.000000
+- Evaluating epoch 13
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.127863:   0%|          | 0/1 [00:20<?, ?it/s]Valid loss 0.127863: 100%|██████████| 1/1 [00:20<00:00, 20.51s/it]Valid loss 0.127863: 100%|██████████| 1/1 [00:20<00:00, 20.52s/it]
+- Finish eval epoch 13, validation loss 0.127863
+
+- Training epoch 14
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.047156:   0%|          | 0/4 [00:45<?, ?it/s]Generating video:   0%|          | 0/4 [00:45<?, ?it/s]   Generating video:  25%|██▌       | 1/4 [01:06<03:19, 66.51s/it]Train loss 0.047248:  25%|██▌       | 1/4 [01:50<03:19, 66.51s/it]Train loss 0.047248:  50%|█████     | 2/4 [01:50<01:47, 53.51s/it]Train loss 0.046228:  50%|█████     | 2/4 [02:36<01:47, 53.51s/it]Train loss 0.046228:  75%|███████▌  | 3/4 [02:36<00:49, 49.87s/it]Train loss 0.048130:  75%|███████▌  | 3/4 [03:21<00:49, 49.87s/it]Train loss 0.048130: 100%|██████████| 4/4 [03:21<00:00, 47.93s/it]Train loss 0.048130: 100%|██████████| 4/4 [03:21<00:00, 50.35s/it]
+- Finish training epoch 14, training loss 0.047190, pos loss 0.047190, group loss 0.000000
+- Evaluating epoch 14
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.125763:   0%|          | 0/1 [00:17<?, ?it/s]Generating video:   0%|          | 0/1 [00:17<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:39<00:00, 39.02s/it]Generating video: 100%|██████████| 1/1 [00:39<00:00, 39.02s/it]
+- Finish eval epoch 14, validation loss 0.125763
+
+- Training epoch 15
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.039159:   0%|          | 0/4 [00:43<?, ?it/s]Train loss 0.039159:  25%|██▌       | 1/4 [00:43<02:11, 43.70s/it]Train loss 0.040255:  25%|██▌       | 1/4 [01:34<02:11, 43.70s/it]Train loss 0.040255:  50%|█████     | 2/4 [01:34<01:35, 47.69s/it]Train loss 0.040228:  50%|█████     | 2/4 [02:17<01:35, 47.69s/it]Train loss 0.040228:  75%|███████▌  | 3/4 [02:17<00:45, 45.64s/it]Train loss 0.043432:  75%|███████▌  | 3/4 [02:59<00:45, 45.64s/it]Train loss 0.043432: 100%|██████████| 4/4 [02:59<00:00, 44.08s/it]Train loss 0.043432: 100%|██████████| 4/4 [02:59<00:00, 44.77s/it]
+- Finish training epoch 15, training loss 0.040768, pos loss 0.040768, group loss 0.000000
+- Evaluating epoch 15
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.123630:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.123630: 100%|██████████| 1/1 [00:17<00:00, 17.82s/it]Valid loss 0.123630: 100%|██████████| 1/1 [00:17<00:00, 17.82s/it]
+- Finish eval epoch 15, validation loss 0.123630
+
+- Training epoch 16
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.033741:   0%|          | 0/4 [00:46<?, ?it/s]Train loss 0.033741:  25%|██▌       | 1/4 [00:46<02:19, 46.52s/it]Train loss 0.034893:  25%|██▌       | 1/4 [01:33<02:19, 46.52s/it]Train loss 0.034893:  50%|█████     | 2/4 [01:33<01:33, 46.61s/it]Train loss 0.038907:  50%|█████     | 2/4 [02:17<01:33, 46.61s/it]Train loss 0.038907:  75%|███████▌  | 3/4 [02:17<00:45, 45.50s/it]Train loss 0.037698:  75%|███████▌  | 3/4 [03:05<00:45, 45.50s/it]Train loss 0.037698: 100%|██████████| 4/4 [03:05<00:00, 46.58s/it]Train loss 0.037698: 100%|██████████| 4/4 [03:05<00:00, 46.40s/it]
+- Finish training epoch 16, training loss 0.036310, pos loss 0.036310, group loss 0.000000
+- Evaluating epoch 16
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.126734:   0%|          | 0/1 [00:19<?, ?it/s]Valid loss 0.126734: 100%|██████████| 1/1 [00:19<00:00, 19.62s/it]Valid loss 0.126734: 100%|██████████| 1/1 [00:19<00:00, 19.62s/it]
+- Finish eval epoch 16, validation loss 0.126734
+
+- Training epoch 17
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.032348:   0%|          | 0/4 [00:46<?, ?it/s]Train loss 0.032348:  25%|██▌       | 1/4 [00:46<02:20, 46.67s/it]Train loss 0.032592:  25%|██▌       | 1/4 [01:35<02:20, 46.67s/it]Train loss 0.032592:  50%|█████     | 2/4 [01:35<01:36, 48.10s/it]Train loss 0.035757:  50%|█████     | 2/4 [02:21<01:36, 48.10s/it]Train loss 0.035757:  75%|███████▌  | 3/4 [02:21<00:46, 46.86s/it]Train loss 0.033075:  75%|███████▌  | 3/4 [03:05<00:46, 46.86s/it]Train loss 0.033075: 100%|██████████| 4/4 [03:05<00:00, 45.76s/it]Train loss 0.033075: 100%|██████████| 4/4 [03:05<00:00, 46.31s/it]
+- Finish training epoch 17, training loss 0.033443, pos loss 0.033443, group loss 0.000000
+- Evaluating epoch 17
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.132064:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.132064: 100%|██████████| 1/1 [00:17<00:00, 17.99s/it]Valid loss 0.132064: 100%|██████████| 1/1 [00:17<00:00, 17.99s/it]
+- Finish eval epoch 17, validation loss 0.132064
+
+- Training epoch 18
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.028434:   0%|          | 0/4 [00:43<?, ?it/s]Train loss 0.028434:  25%|██▌       | 1/4 [00:43<02:09, 43.22s/it]Train loss 0.030296:  25%|██▌       | 1/4 [01:27<02:09, 43.22s/it]Train loss 0.030296:  50%|█████     | 2/4 [01:27<01:27, 43.64s/it]Train loss 0.031531:  50%|█████     | 2/4 [02:13<01:27, 43.64s/it]Train loss 0.031531:  75%|███████▌  | 3/4 [02:13<00:44, 44.85s/it]Train loss 0.028655:  75%|███████▌  | 3/4 [02:56<00:44, 44.85s/it]Train loss 0.028655: 100%|██████████| 4/4 [02:56<00:00, 43.97s/it]Train loss 0.028655: 100%|██████████| 4/4 [02:56<00:00, 44.02s/it]
+- Finish training epoch 18, training loss 0.029729, pos loss 0.029729, group loss 0.000000
+- Evaluating epoch 18
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.132244:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.132244: 100%|██████████| 1/1 [00:17<00:00, 17.75s/it]Valid loss 0.132244: 100%|██████████| 1/1 [00:17<00:00, 17.75s/it]
+- Finish eval epoch 18, validation loss 0.132244
+
+- Training epoch 19
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.025736:   0%|          | 0/4 [00:46<?, ?it/s]Generating video:   0%|          | 0/4 [00:46<?, ?it/s]   Generating video:  25%|██▌       | 1/4 [01:06<03:19, 66.66s/it]Train loss 0.024008:  25%|██▌       | 1/4 [01:53<03:19, 66.66s/it]Train loss 0.024008:  50%|█████     | 2/4 [01:53<01:50, 55.03s/it]Train loss 0.025692:  50%|█████     | 2/4 [02:38<01:50, 55.03s/it]Train loss 0.025692:  75%|███████▌  | 3/4 [02:38<00:50, 50.50s/it]Train loss 0.028558:  75%|███████▌  | 3/4 [03:25<00:50, 50.50s/it]Train loss 0.028558: 100%|██████████| 4/4 [03:25<00:00, 49.01s/it]Train loss 0.028558: 100%|██████████| 4/4 [03:25<00:00, 51.35s/it]
+- Finish training epoch 19, training loss 0.025998, pos loss 0.025998, group loss 0.000000
+- Evaluating epoch 19
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.135328:   0%|          | 0/1 [00:17<?, ?it/s]Generating video:   0%|          | 0/1 [00:17<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:39<00:00, 39.23s/it]Generating video: 100%|██████████| 1/1 [00:39<00:00, 39.23s/it]
+- Finish eval epoch 19, validation loss 0.135328
+
+- Training epoch 20
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.021641:   0%|          | 0/4 [00:44<?, ?it/s]Train loss 0.021641:  25%|██▌       | 1/4 [00:44<02:14, 44.73s/it]Train loss 0.024850:  25%|██▌       | 1/4 [01:27<02:14, 44.73s/it]Train loss 0.024850:  50%|█████     | 2/4 [01:27<01:27, 43.62s/it]Train loss 0.022364:  50%|█████     | 2/4 [02:12<01:27, 43.62s/it]Train loss 0.022364:  75%|███████▌  | 3/4 [02:12<00:44, 44.27s/it]Train loss 0.023572:  75%|███████▌  | 3/4 [02:59<00:44, 44.27s/it]Train loss 0.023572: 100%|██████████| 4/4 [02:59<00:00, 45.11s/it]Train loss 0.023572: 100%|██████████| 4/4 [02:59<00:00, 44.75s/it]
+- Finish training epoch 20, training loss 0.023107, pos loss 0.023107, group loss 0.000000
+- Evaluating epoch 20
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.132716:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.132716: 100%|██████████| 1/1 [00:17<00:00, 17.32s/it]Valid loss 0.132716: 100%|██████████| 1/1 [00:17<00:00, 17.32s/it]
+- Finish eval epoch 20, validation loss 0.132716
+
+- Training epoch 21
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.018350:   0%|          | 0/4 [00:43<?, ?it/s]Train loss 0.018350:  25%|██▌       | 1/4 [00:43<02:10, 43.54s/it]Train loss 0.020146:  25%|██▌       | 1/4 [01:26<02:10, 43.54s/it]Train loss 0.020146:  50%|█████     | 2/4 [01:26<01:25, 42.91s/it]Train loss 0.021557:  50%|█████     | 2/4 [02:10<01:25, 42.91s/it]Train loss 0.021557:  75%|███████▌  | 3/4 [02:10<00:43, 43.64s/it]Train loss 0.020642:  75%|███████▌  | 3/4 [02:55<00:43, 43.64s/it]Train loss 0.020642: 100%|██████████| 4/4 [02:55<00:00, 44.32s/it]Train loss 0.020642: 100%|██████████| 4/4 [02:55<00:00, 43.97s/it]
+- Finish training epoch 21, training loss 0.020174, pos loss 0.020174, group loss 0.000000
+- Evaluating epoch 21
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.132300:   0%|          | 0/1 [00:20<?, ?it/s]Valid loss 0.132300: 100%|██████████| 1/1 [00:20<00:00, 20.32s/it]Valid loss 0.132300: 100%|██████████| 1/1 [00:20<00:00, 20.32s/it]
+- Finish eval epoch 21, validation loss 0.132300
+
+- Training epoch 22
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.016357:   0%|          | 0/4 [00:47<?, ?it/s]Train loss 0.016357:  25%|██▌       | 1/4 [00:47<02:22, 47.59s/it]Train loss 0.016766:  25%|██▌       | 1/4 [01:33<02:22, 47.59s/it]Train loss 0.016766:  50%|█████     | 2/4 [01:33<01:32, 46.42s/it]Train loss 0.016992:  50%|█████     | 2/4 [02:16<01:32, 46.42s/it]Train loss 0.016992:  75%|███████▌  | 3/4 [02:16<00:44, 44.90s/it]Train loss 0.019407:  75%|███████▌  | 3/4 [03:00<00:44, 44.90s/it]Train loss 0.019407: 100%|██████████| 4/4 [03:00<00:00, 44.52s/it]Train loss 0.019407: 100%|██████████| 4/4 [03:00<00:00, 45.06s/it]
+- Finish training epoch 22, training loss 0.017380, pos loss 0.017380, group loss 0.000000
+- Evaluating epoch 22
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.130171:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.130171: 100%|██████████| 1/1 [00:17<00:00, 17.93s/it]Valid loss 0.130171: 100%|██████████| 1/1 [00:17<00:00, 17.93s/it]
+- Finish eval epoch 22, validation loss 0.130171
+
+- Training epoch 23
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.014293:   0%|          | 0/4 [00:42<?, ?it/s]Train loss 0.014293:  25%|██▌       | 1/4 [00:42<02:07, 42.43s/it]Train loss 0.015055:  25%|██▌       | 1/4 [01:31<02:07, 42.43s/it]Train loss 0.015055:  50%|█████     | 2/4 [01:31<01:32, 46.09s/it]Train loss 0.015484:  50%|█████     | 2/4 [02:17<01:32, 46.09s/it]Train loss 0.015484:  75%|███████▌  | 3/4 [02:17<00:46, 46.02s/it]Train loss 0.015017:  75%|███████▌  | 3/4 [03:05<00:46, 46.02s/it]Train loss 0.015017: 100%|██████████| 4/4 [03:05<00:00, 46.84s/it]Train loss 0.015017: 100%|██████████| 4/4 [03:05<00:00, 46.28s/it]
+- Finish training epoch 23, training loss 0.014962, pos loss 0.014962, group loss 0.000000
+- Evaluating epoch 23
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.134825:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.134825: 100%|██████████| 1/1 [00:18<00:00, 18.39s/it]Valid loss 0.134825: 100%|██████████| 1/1 [00:18<00:00, 18.39s/it]
+- Finish eval epoch 23, validation loss 0.134825
+
+- Training epoch 24
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.012330:   0%|          | 0/4 [00:46<?, ?it/s]Generating video:   0%|          | 0/4 [00:46<?, ?it/s]   Generating video:  25%|██▌       | 1/4 [01:07<03:22, 67.39s/it]Train loss 0.012570:  25%|██▌       | 1/4 [01:51<03:22, 67.39s/it]Train loss 0.012570:  50%|█████     | 2/4 [01:51<01:47, 53.94s/it]Train loss 0.014270:  50%|█████     | 2/4 [02:37<01:47, 53.94s/it]Train loss 0.014270:  75%|███████▌  | 3/4 [02:37<00:50, 50.22s/it]Train loss 0.014039:  75%|███████▌  | 3/4 [03:25<00:50, 50.22s/it]Train loss 0.014039: 100%|██████████| 4/4 [03:25<00:00, 49.22s/it]Train loss 0.014039: 100%|██████████| 4/4 [03:25<00:00, 51.35s/it]
+- Finish training epoch 24, training loss 0.013302, pos loss 0.013302, group loss 0.000000
+- Evaluating epoch 24
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.137000:   0%|          | 0/1 [00:18<?, ?it/s]Generating video:   0%|          | 0/1 [00:18<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:40<00:00, 40.55s/it]Generating video: 100%|██████████| 1/1 [00:40<00:00, 40.55s/it]
+- Finish eval epoch 24, validation loss 0.137000
+
+- Training epoch 25
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.010761:   0%|          | 0/4 [00:47<?, ?it/s]Train loss 0.010761:  25%|██▌       | 1/4 [00:47<02:23, 47.69s/it]Train loss 0.011103:  25%|██▌       | 1/4 [01:35<02:23, 47.69s/it]Train loss 0.011103:  50%|█████     | 2/4 [01:35<01:36, 48.03s/it]Train loss 0.013195:  50%|█████     | 2/4 [02:20<01:36, 48.03s/it]Train loss 0.013195:  75%|███████▌  | 3/4 [02:20<00:46, 46.61s/it]Train loss 0.011811:  75%|███████▌  | 3/4 [03:04<00:46, 46.61s/it]Train loss 0.011811: 100%|██████████| 4/4 [03:04<00:00, 45.60s/it]Train loss 0.011811: 100%|██████████| 4/4 [03:04<00:00, 46.23s/it]
+- Finish training epoch 25, training loss 0.011718, pos loss 0.011718, group loss 0.000000
+- Evaluating epoch 25
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.135452:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.135452: 100%|██████████| 1/1 [00:17<00:00, 17.53s/it]Valid loss 0.135452: 100%|██████████| 1/1 [00:17<00:00, 17.53s/it]
+- Finish eval epoch 25, validation loss 0.135452
+
+- Training epoch 26
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.009386:   0%|          | 0/4 [00:43<?, ?it/s]Train loss 0.009386:  25%|██▌       | 1/4 [00:43<02:10, 43.58s/it]Train loss 0.010333:  25%|██▌       | 1/4 [01:27<02:10, 43.58s/it]Train loss 0.010333:  50%|█████     | 2/4 [01:27<01:27, 43.90s/it]Train loss 0.011396:  50%|█████     | 2/4 [02:13<01:27, 43.90s/it]Train loss 0.011396:  75%|███████▌  | 3/4 [02:13<00:44, 44.98s/it]Train loss 0.013184:  75%|███████▌  | 3/4 [02:59<00:44, 44.98s/it]Train loss 0.013184: 100%|██████████| 4/4 [02:59<00:00, 45.29s/it]Train loss 0.013184: 100%|██████████| 4/4 [02:59<00:00, 44.93s/it]
+- Finish training epoch 26, training loss 0.011075, pos loss 0.011075, group loss 0.000000
+- Evaluating epoch 26
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.130973:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.130973: 100%|██████████| 1/1 [00:17<00:00, 17.19s/it]Valid loss 0.130973: 100%|██████████| 1/1 [00:17<00:00, 17.19s/it]
+- Finish eval epoch 26, validation loss 0.130973
+
+- Training epoch 27
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.009562:   0%|          | 0/4 [00:47<?, ?it/s]Train loss 0.009562:  25%|██▌       | 1/4 [00:47<02:23, 47.85s/it]Train loss 0.009339:  25%|██▌       | 1/4 [01:35<02:23, 47.85s/it]Train loss 0.009339:  50%|█████     | 2/4 [01:35<01:35, 47.68s/it]Train loss 0.009205:  50%|█████     | 2/4 [02:20<01:35, 47.68s/it]Train loss 0.009205:  75%|███████▌  | 3/4 [02:20<00:46, 46.55s/it]Train loss 0.009508:  75%|███████▌  | 3/4 [03:05<00:46, 46.55s/it]Train loss 0.009508: 100%|██████████| 4/4 [03:05<00:00, 45.86s/it]Train loss 0.009508: 100%|██████████| 4/4 [03:05<00:00, 46.36s/it]
+- Finish training epoch 27, training loss 0.009403, pos loss 0.009403, group loss 0.000000
+- Evaluating epoch 27
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.133386:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.133386: 100%|██████████| 1/1 [00:18<00:00, 18.25s/it]Valid loss 0.133386: 100%|██████████| 1/1 [00:18<00:00, 18.25s/it]
+- Finish eval epoch 27, validation loss 0.133386
+
+- Training epoch 28
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.007011:   0%|          | 0/4 [00:46<?, ?it/s]Train loss 0.007011:  25%|██▌       | 1/4 [00:46<02:18, 46.12s/it]Train loss 0.008890:  25%|██▌       | 1/4 [01:32<02:18, 46.12s/it]Train loss 0.008890:  50%|█████     | 2/4 [01:32<01:32, 46.32s/it]Train loss 0.009211:  50%|█████     | 2/4 [02:19<01:32, 46.32s/it]Train loss 0.009211:  75%|███████▌  | 3/4 [02:19<00:46, 46.49s/it]Train loss 0.008675:  75%|███████▌  | 3/4 [03:08<00:46, 46.49s/it]Train loss 0.008675: 100%|██████████| 4/4 [03:08<00:00, 47.49s/it]Train loss 0.008675: 100%|██████████| 4/4 [03:08<00:00, 47.08s/it]
+- Finish training epoch 28, training loss 0.008447, pos loss 0.008447, group loss 0.000000
+- Evaluating epoch 28
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.134773:   0%|          | 0/1 [00:12<?, ?it/s]Valid loss 0.134773: 100%|██████████| 1/1 [00:12<00:00, 12.31s/it]Valid loss 0.134773: 100%|██████████| 1/1 [00:12<00:00, 12.31s/it]
+- Finish eval epoch 28, validation loss 0.134773
+
+- Training epoch 29
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.007725:   0%|          | 0/4 [00:45<?, ?it/s]Generating video:   0%|          | 0/4 [00:45<?, ?it/s]   Generating video:  25%|██▌       | 1/4 [01:08<03:24, 68.03s/it]Train loss 0.008709:  25%|██▌       | 1/4 [01:53<03:24, 68.03s/it]Train loss 0.008709:  50%|█████     | 2/4 [01:53<01:48, 54.47s/it]Train loss 0.006609:  50%|█████     | 2/4 [02:38<01:48, 54.47s/it]Train loss 0.006609:  75%|███████▌  | 3/4 [02:38<00:50, 50.30s/it]Train loss 0.008518:  75%|███████▌  | 3/4 [03:23<00:50, 50.30s/it]Train loss 0.008518: 100%|██████████| 4/4 [03:23<00:00, 48.38s/it]Train loss 0.008518: 100%|██████████| 4/4 [03:23<00:00, 50.94s/it]
+- Finish training epoch 29, training loss 0.007890, pos loss 0.007890, group loss 0.000000
+- Evaluating epoch 29
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.134390:   0%|          | 0/1 [00:18<?, ?it/s]Generating video:   0%|          | 0/1 [00:18<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:40<00:00, 40.73s/it]Generating video: 100%|██████████| 1/1 [00:40<00:00, 40.73s/it]
+- Finish eval epoch 29, validation loss 0.134390
+
+- Training epoch 30
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.006331:   0%|          | 0/4 [00:43<?, ?it/s]Train loss 0.006331:  25%|██▌       | 1/4 [00:43<02:10, 43.49s/it]Train loss 0.006544:  25%|██▌       | 1/4 [01:28<02:10, 43.49s/it]Train loss 0.006544:  50%|█████     | 2/4 [01:28<01:29, 44.61s/it]Train loss 0.006935:  50%|█████     | 2/4 [02:15<01:29, 44.61s/it]Train loss 0.006935:  75%|███████▌  | 3/4 [02:15<00:45, 45.75s/it]Train loss 0.008716:  75%|███████▌  | 3/4 [03:01<00:45, 45.75s/it]Train loss 0.008716: 100%|██████████| 4/4 [03:01<00:00, 45.83s/it]Train loss 0.008716: 100%|██████████| 4/4 [03:01<00:00, 45.49s/it]
+- Finish training epoch 30, training loss 0.007132, pos loss 0.007132, group loss 0.000000
+- Evaluating epoch 30
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.131301:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.131301: 100%|██████████| 1/1 [00:17<00:00, 17.62s/it]Valid loss 0.131301: 100%|██████████| 1/1 [00:17<00:00, 17.62s/it]
+- Finish eval epoch 30, validation loss 0.131301
+
+- Training epoch 31
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.006639:   0%|          | 0/4 [00:45<?, ?it/s]Train loss 0.006639:  25%|██▌       | 1/4 [00:45<02:15, 45.05s/it]Train loss 0.006853:  25%|██▌       | 1/4 [01:27<02:15, 45.05s/it]Train loss 0.006853:  50%|█████     | 2/4 [01:27<01:27, 43.63s/it]Train loss 0.006776:  50%|█████     | 2/4 [02:12<01:27, 43.63s/it]Train loss 0.006776:  75%|███████▌  | 3/4 [02:12<00:44, 44.13s/it]Train loss 0.005938:  75%|███████▌  | 3/4 [02:57<00:44, 44.13s/it]Train loss 0.005938: 100%|██████████| 4/4 [02:57<00:00, 44.40s/it]Train loss 0.005938: 100%|██████████| 4/4 [02:57<00:00, 44.30s/it]
+- Finish training epoch 31, training loss 0.006552, pos loss 0.006552, group loss 0.000000
+- Evaluating epoch 31
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.134743:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.134743: 100%|██████████| 1/1 [00:17<00:00, 17.86s/it]Valid loss 0.134743: 100%|██████████| 1/1 [00:17<00:00, 17.86s/it]
+- Finish eval epoch 31, validation loss 0.134743
+
+- Training epoch 32
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.004865:   0%|          | 0/4 [00:43<?, ?it/s]Train loss 0.004865:  25%|██▌       | 1/4 [00:43<02:10, 43.57s/it]Train loss 0.005131:  25%|██▌       | 1/4 [01:34<02:10, 43.57s/it]Train loss 0.005131:  50%|█████     | 2/4 [01:34<01:36, 48.10s/it]Train loss 0.004848:  50%|█████     | 2/4 [02:21<01:36, 48.10s/it]Train loss 0.004848:  75%|███████▌  | 3/4 [02:21<00:47, 47.66s/it]Train loss 0.007113:  75%|███████▌  | 3/4 [03:08<00:47, 47.66s/it]Train loss 0.007113: 100%|██████████| 4/4 [03:08<00:00, 47.15s/it]Train loss 0.007113: 100%|██████████| 4/4 [03:08<00:00, 47.08s/it]
+- Finish training epoch 32, training loss 0.005489, pos loss 0.005489, group loss 0.000000
+- Evaluating epoch 32
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.133073:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.133073: 100%|██████████| 1/1 [00:18<00:00, 18.19s/it]Valid loss 0.133073: 100%|██████████| 1/1 [00:18<00:00, 18.19s/it]
+- Finish eval epoch 32, validation loss 0.133073
+
+- Training epoch 33
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.004939:   0%|          | 0/4 [00:47<?, ?it/s]Train loss 0.004939:  25%|██▌       | 1/4 [00:47<02:23, 47.72s/it]Train loss 0.004893:  25%|██▌       | 1/4 [01:33<02:23, 47.72s/it]Train loss 0.004893:  50%|█████     | 2/4 [01:33<01:33, 46.74s/it]Train loss 0.005235:  50%|█████     | 2/4 [02:20<01:33, 46.74s/it]Train loss 0.005235:  75%|███████▌  | 3/4 [02:20<00:46, 46.71s/it]Train loss 0.005635:  75%|███████▌  | 3/4 [03:06<00:46, 46.71s/it]Train loss 0.005635: 100%|██████████| 4/4 [03:06<00:00, 46.34s/it]Train loss 0.005635: 100%|██████████| 4/4 [03:06<00:00, 46.55s/it]
+- Finish training epoch 33, training loss 0.005175, pos loss 0.005175, group loss 0.000000
+- Evaluating epoch 33
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.132025:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.132025: 100%|██████████| 1/1 [00:18<00:00, 18.31s/it]Valid loss 0.132025: 100%|██████████| 1/1 [00:18<00:00, 18.31s/it]
+- Finish eval epoch 33, validation loss 0.132025
+
+- Training epoch 34
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.004546:   0%|          | 0/4 [00:45<?, ?it/s]Generating video:   0%|          | 0/4 [00:45<?, ?it/s]   Generating video:  25%|██▌       | 1/4 [01:07<03:21, 67.10s/it]Train loss 0.003816:  25%|██▌       | 1/4 [01:54<03:21, 67.10s/it]Train loss 0.003816:  50%|█████     | 2/4 [01:54<01:50, 55.39s/it]Train loss 0.004468:  50%|█████     | 2/4 [02:41<01:50, 55.39s/it]Train loss 0.004468:  75%|███████▌  | 3/4 [02:41<00:51, 51.82s/it]Train loss 0.008934:  75%|███████▌  | 3/4 [03:29<00:51, 51.82s/it]Train loss 0.008934: 100%|██████████| 4/4 [03:29<00:00, 50.29s/it]Train loss 0.008934: 100%|██████████| 4/4 [03:29<00:00, 52.45s/it]
+- Finish training epoch 34, training loss 0.005441, pos loss 0.005441, group loss 0.000000
+- Evaluating epoch 34
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.134577:   0%|          | 0/1 [00:17<?, ?it/s]Generating video:   0%|          | 0/1 [00:17<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:40<00:00, 40.44s/it]Generating video: 100%|██████████| 1/1 [00:40<00:00, 40.44s/it]
+- Finish eval epoch 34, validation loss 0.134577
+
+- Training epoch 35
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.006216:   0%|          | 0/4 [00:47<?, ?it/s]Train loss 0.006216:  25%|██▌       | 1/4 [00:47<02:22, 47.37s/it]Train loss 0.004864:  25%|██▌       | 1/4 [01:34<02:22, 47.37s/it]Train loss 0.004864:  50%|█████     | 2/4 [01:34<01:34, 47.18s/it]Train loss 0.003865:  50%|█████     | 2/4 [02:15<01:34, 47.18s/it]Train loss 0.003865:  75%|███████▌  | 3/4 [02:15<00:44, 44.34s/it]Train loss 0.004876:  75%|███████▌  | 3/4 [02:59<00:44, 44.34s/it]Train loss 0.004876: 100%|██████████| 4/4 [02:59<00:00, 44.32s/it]Train loss 0.004876: 100%|██████████| 4/4 [02:59<00:00, 44.92s/it]
+- Finish training epoch 35, training loss 0.004955, pos loss 0.004955, group loss 0.000000
+- Evaluating epoch 35
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.132504:   0%|          | 0/1 [00:16<?, ?it/s]Valid loss 0.132504: 100%|██████████| 1/1 [00:16<00:00, 16.47s/it]Valid loss 0.132504: 100%|██████████| 1/1 [00:16<00:00, 16.47s/it]
+- Finish eval epoch 35, validation loss 0.132504
+
+- Training epoch 36
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.005759:   0%|          | 0/4 [00:42<?, ?it/s]Train loss 0.005759:  25%|██▌       | 1/4 [00:42<02:08, 42.88s/it]Train loss 0.006700:  25%|██▌       | 1/4 [01:25<02:08, 42.88s/it]Train loss 0.006700:  50%|█████     | 2/4 [01:25<01:25, 42.72s/it]Train loss 0.006498:  50%|█████     | 2/4 [02:07<01:25, 42.72s/it]Train loss 0.006498:  75%|███████▌  | 3/4 [02:07<00:42, 42.52s/it]Train loss 0.006702:  75%|███████▌  | 3/4 [02:51<00:42, 42.52s/it]Train loss 0.006702: 100%|██████████| 4/4 [02:51<00:00, 43.19s/it]Train loss 0.006702: 100%|██████████| 4/4 [02:51<00:00, 43.00s/it]
+- Finish training epoch 36, training loss 0.006415, pos loss 0.006415, group loss 0.000000
+- Evaluating epoch 36
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.133796:   0%|          | 0/1 [00:16<?, ?it/s]Valid loss 0.133796: 100%|██████████| 1/1 [00:16<00:00, 16.52s/it]Valid loss 0.133796: 100%|██████████| 1/1 [00:16<00:00, 16.52s/it]
+- Finish eval epoch 36, validation loss 0.133796
+
+- Training epoch 37
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.005597:   0%|          | 0/4 [00:45<?, ?it/s]Train loss 0.005597:  25%|██▌       | 1/4 [00:45<02:15, 45.15s/it]Train loss 0.004923:  25%|██▌       | 1/4 [01:28<02:15, 45.15s/it]Train loss 0.004923:  50%|█████     | 2/4 [01:28<01:28, 44.04s/it]Train loss 0.004434:  50%|█████     | 2/4 [02:11<01:28, 44.04s/it]Train loss 0.004434:  75%|███████▌  | 3/4 [02:11<00:43, 43.58s/it]Train loss 0.005400:  75%|███████▌  | 3/4 [02:57<00:43, 43.58s/it]Train loss 0.005400: 100%|██████████| 4/4 [02:57<00:00, 44.73s/it]Train loss 0.005400: 100%|██████████| 4/4 [02:57<00:00, 44.49s/it]
+- Finish training epoch 37, training loss 0.005088, pos loss 0.005088, group loss 0.000000
+- Evaluating epoch 37
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.134413:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.134413: 100%|██████████| 1/1 [00:18<00:00, 18.80s/it]Valid loss 0.134413: 100%|██████████| 1/1 [00:18<00:00, 18.80s/it]
+- Finish eval epoch 37, validation loss 0.134413
+
+- Training epoch 38
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.004704:   0%|          | 0/4 [00:42<?, ?it/s]Train loss 0.004704:  25%|██▌       | 1/4 [00:42<02:08, 42.99s/it]Train loss 0.004844:  25%|██▌       | 1/4 [01:26<02:08, 42.99s/it]Train loss 0.004844:  50%|█████     | 2/4 [01:26<01:26, 43.25s/it]Train loss 0.004799:  50%|█████     | 2/4 [02:11<01:26, 43.25s/it]Train loss 0.004799:  75%|███████▌  | 3/4 [02:11<00:43, 43.86s/it]Train loss 0.004257:  75%|███████▌  | 3/4 [02:57<00:43, 43.86s/it]Train loss 0.004257: 100%|██████████| 4/4 [02:57<00:00, 44.80s/it]Train loss 0.004257: 100%|██████████| 4/4 [02:57<00:00, 44.32s/it]
+- Finish training epoch 38, training loss 0.004651, pos loss 0.004651, group loss 0.000000
+- Evaluating epoch 38
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.131838:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.131838: 100%|██████████| 1/1 [00:18<00:00, 18.35s/it]Valid loss 0.131838: 100%|██████████| 1/1 [00:18<00:00, 18.35s/it]
+- Finish eval epoch 38, validation loss 0.131838
+
+- Training epoch 39
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.005001:   0%|          | 0/4 [00:46<?, ?it/s]Generating video:   0%|          | 0/4 [00:46<?, ?it/s]   Generating video:  25%|██▌       | 1/4 [01:08<03:26, 68.79s/it]Train loss 0.007497:  25%|██▌       | 1/4 [01:54<03:26, 68.79s/it]Train loss 0.007497:  50%|█████     | 2/4 [01:54<01:49, 54.96s/it]Train loss 0.004920:  50%|█████     | 2/4 [02:41<01:49, 54.96s/it]Train loss 0.004920:  75%|███████▌  | 3/4 [02:41<00:51, 51.46s/it]Train loss 0.006604:  75%|███████▌  | 3/4 [03:29<00:51, 51.46s/it]Train loss 0.006604: 100%|██████████| 4/4 [03:29<00:00, 50.25s/it]Train loss 0.006604: 100%|██████████| 4/4 [03:29<00:00, 52.44s/it]
+- Finish training epoch 39, training loss 0.006005, pos loss 0.006005, group loss 0.000000
+- Evaluating epoch 39
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.132459:   0%|          | 0/1 [00:18<?, ?it/s]Generating video:   0%|          | 0/1 [00:18<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:40<00:00, 40.03s/it]Generating video: 100%|██████████| 1/1 [00:40<00:00, 40.03s/it]
+- Finish eval epoch 39, validation loss 0.132459
+
+- Training epoch 40
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.006475:   0%|          | 0/4 [00:47<?, ?it/s]Train loss 0.006475:  25%|██▌       | 1/4 [00:47<02:21, 47.18s/it]Train loss 0.007261:  25%|██▌       | 1/4 [01:35<02:21, 47.18s/it]Train loss 0.007261:  50%|█████     | 2/4 [01:35<01:35, 47.83s/it]Train loss 0.005147:  50%|█████     | 2/4 [02:22<01:35, 47.83s/it]Train loss 0.005147:  75%|███████▌  | 3/4 [02:22<00:47, 47.41s/it]Train loss 0.004787:  75%|███████▌  | 3/4 [03:08<00:47, 47.41s/it]Train loss 0.004787: 100%|██████████| 4/4 [03:08<00:00, 46.79s/it]Train loss 0.004787: 100%|██████████| 4/4 [03:08<00:00, 47.06s/it]
+- Finish training epoch 40, training loss 0.005918, pos loss 0.005918, group loss 0.000000
+- Evaluating epoch 40
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.133566:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.133566: 100%|██████████| 1/1 [00:18<00:00, 18.12s/it]Valid loss 0.133566: 100%|██████████| 1/1 [00:18<00:00, 18.12s/it]
+- Finish eval epoch 40, validation loss 0.133566
+
+- Training epoch 41
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.003863:   0%|          | 0/4 [00:44<?, ?it/s]Train loss 0.003863:  25%|██▌       | 1/4 [00:44<02:12, 44.31s/it]Train loss 0.005572:  25%|██▌       | 1/4 [01:28<02:12, 44.31s/it]Train loss 0.005572:  50%|█████     | 2/4 [01:28<01:28, 44.45s/it]Train loss 0.004918:  50%|█████     | 2/4 [02:13<01:28, 44.45s/it]Train loss 0.004918:  75%|███████▌  | 3/4 [02:13<00:44, 44.43s/it]Train loss 0.003839:  75%|███████▌  | 3/4 [02:56<00:44, 44.43s/it]Train loss 0.003839: 100%|██████████| 4/4 [02:56<00:00, 43.97s/it]Train loss 0.003839: 100%|██████████| 4/4 [02:56<00:00, 44.13s/it]
+- Finish training epoch 41, training loss 0.004548, pos loss 0.004548, group loss 0.000000
+- Evaluating epoch 41
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.131248:   0%|          | 0/1 [00:15<?, ?it/s]Valid loss 0.131248: 100%|██████████| 1/1 [00:15<00:00, 15.68s/it]Valid loss 0.131248: 100%|██████████| 1/1 [00:15<00:00, 15.68s/it]
+- Finish eval epoch 41, validation loss 0.131248
+
+- Training epoch 42
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.005303:   0%|          | 0/4 [00:42<?, ?it/s]Train loss 0.005303:  25%|██▌       | 1/4 [00:42<02:08, 42.71s/it]Train loss 0.003614:  25%|██▌       | 1/4 [01:27<02:08, 42.71s/it]Train loss 0.003614:  50%|█████     | 2/4 [01:27<01:27, 43.79s/it]Train loss 0.004127:  50%|█████     | 2/4 [02:12<01:27, 43.79s/it]Train loss 0.004127:  75%|███████▌  | 3/4 [02:12<00:44, 44.30s/it]Train loss 0.003705:  75%|███████▌  | 3/4 [02:56<00:44, 44.30s/it]Train loss 0.003705: 100%|██████████| 4/4 [02:56<00:00, 44.44s/it]Train loss 0.003705: 100%|██████████| 4/4 [02:56<00:00, 44.21s/it]
+- Finish training epoch 42, training loss 0.004187, pos loss 0.004187, group loss 0.000000
+- Evaluating epoch 42
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.133908:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.133908: 100%|██████████| 1/1 [00:17<00:00, 17.92s/it]Valid loss 0.133908: 100%|██████████| 1/1 [00:17<00:00, 17.92s/it]
+- Finish eval epoch 42, validation loss 0.133908
+
+- Training epoch 43
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.002667:   0%|          | 0/4 [00:44<?, ?it/s]Train loss 0.002667:  25%|██▌       | 1/4 [00:44<02:13, 44.64s/it]Train loss 0.003954:  25%|██▌       | 1/4 [01:27<02:13, 44.64s/it]Train loss 0.003954:  50%|█████     | 2/4 [01:27<01:27, 43.64s/it]Train loss 0.003600:  50%|█████     | 2/4 [02:10<01:27, 43.64s/it]Train loss 0.003600:  75%|███████▌  | 3/4 [02:10<00:43, 43.28s/it]Train loss 0.003759:  75%|███████▌  | 3/4 [02:56<00:43, 43.28s/it]Train loss 0.003759: 100%|██████████| 4/4 [02:56<00:00, 44.32s/it]Train loss 0.003759: 100%|██████████| 4/4 [02:56<00:00, 44.09s/it]
+- Finish training epoch 43, training loss 0.003495, pos loss 0.003495, group loss 0.000000
+- Evaluating epoch 43
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.130433:   0%|          | 0/1 [00:16<?, ?it/s]Valid loss 0.130433: 100%|██████████| 1/1 [00:16<00:00, 16.68s/it]Valid loss 0.130433: 100%|██████████| 1/1 [00:16<00:00, 16.68s/it]
+- Finish eval epoch 43, validation loss 0.130433
+
+- Training epoch 44
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.003281:   0%|          | 0/4 [00:45<?, ?it/s]Generating video:   0%|          | 0/4 [00:45<?, ?it/s]   Generating video:  25%|██▌       | 1/4 [01:07<03:22, 67.56s/it]Train loss 0.004704:  25%|██▌       | 1/4 [01:53<03:22, 67.56s/it]Train loss 0.004704:  50%|█████     | 2/4 [01:53<01:50, 55.00s/it]Train loss 0.006287:  50%|█████     | 2/4 [02:41<01:50, 55.00s/it]Train loss 0.006287:  75%|███████▌  | 3/4 [02:41<00:51, 51.84s/it]Train loss 0.004370:  75%|███████▌  | 3/4 [03:27<00:51, 51.84s/it]Train loss 0.004370: 100%|██████████| 4/4 [03:27<00:00, 49.54s/it]Train loss 0.004370: 100%|██████████| 4/4 [03:27<00:00, 51.96s/it]
+- Finish training epoch 44, training loss 0.004661, pos loss 0.004661, group loss 0.000000
+- Evaluating epoch 44
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.130141:   0%|          | 0/1 [00:17<?, ?it/s]Generating video:   0%|          | 0/1 [00:17<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:40<00:00, 40.20s/it]Generating video: 100%|██████████| 1/1 [00:40<00:00, 40.20s/it]
+- Finish eval epoch 44, validation loss 0.130141
+
+- Training epoch 45
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.003002:   0%|          | 0/4 [00:44<?, ?it/s]Train loss 0.003002:  25%|██▌       | 1/4 [00:44<02:12, 44.30s/it]Train loss 0.003071:  25%|██▌       | 1/4 [01:28<02:12, 44.30s/it]Train loss 0.003071:  50%|█████     | 2/4 [01:28<01:28, 44.49s/it]Train loss 0.005063:  50%|█████     | 2/4 [02:13<01:28, 44.49s/it]Train loss 0.005063:  75%|███████▌  | 3/4 [02:13<00:44, 44.62s/it]Train loss 0.004090:  75%|███████▌  | 3/4 [02:58<00:44, 44.62s/it]Train loss 0.004090: 100%|██████████| 4/4 [02:58<00:00, 44.58s/it]Train loss 0.004090: 100%|██████████| 4/4 [02:58<00:00, 44.55s/it]
+- Finish training epoch 45, training loss 0.003806, pos loss 0.003806, group loss 0.000000
+- Evaluating epoch 45
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.130954:   0%|          | 0/1 [00:20<?, ?it/s]Valid loss 0.130954: 100%|██████████| 1/1 [00:20<00:00, 20.14s/it]Valid loss 0.130954: 100%|██████████| 1/1 [00:20<00:00, 20.14s/it]
+- Finish eval epoch 45, validation loss 0.130954
+
+- Training epoch 46
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.003045:   0%|          | 0/4 [00:47<?, ?it/s]Train loss 0.003045:  25%|██▌       | 1/4 [00:47<02:22, 47.57s/it]Train loss 0.003143:  25%|██▌       | 1/4 [01:34<02:22, 47.57s/it]Train loss 0.003143:  50%|█████     | 2/4 [01:34<01:34, 47.01s/it]Train loss 0.006453:  50%|█████     | 2/4 [02:22<01:34, 47.01s/it]Train loss 0.006453:  75%|███████▌  | 3/4 [02:22<00:47, 47.73s/it]Train loss 0.004131:  75%|███████▌  | 3/4 [03:06<00:47, 47.73s/it]Train loss 0.004131: 100%|██████████| 4/4 [03:06<00:00, 46.31s/it]Train loss 0.004131: 100%|██████████| 4/4 [03:06<00:00, 46.73s/it]
+- Finish training epoch 46, training loss 0.004193, pos loss 0.004193, group loss 0.000000
+- Evaluating epoch 46
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.130403:   0%|          | 0/1 [00:16<?, ?it/s]Valid loss 0.130403: 100%|██████████| 1/1 [00:16<00:00, 16.23s/it]Valid loss 0.130403: 100%|██████████| 1/1 [00:16<00:00, 16.23s/it]
+- Finish eval epoch 46, validation loss 0.130403
+
+- Training epoch 47
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.003161:   0%|          | 0/4 [00:41<?, ?it/s]Train loss 0.003161:  25%|██▌       | 1/4 [00:41<02:04, 41.51s/it]Train loss 0.004518:  25%|██▌       | 1/4 [01:24<02:04, 41.51s/it]Train loss 0.004518:  50%|█████     | 2/4 [01:24<01:25, 42.55s/it]Train loss 0.005366:  50%|█████     | 2/4 [02:08<01:25, 42.55s/it]Train loss 0.005366:  75%|███████▌  | 3/4 [02:08<00:42, 42.94s/it]Train loss 0.004493:  75%|███████▌  | 3/4 [02:52<00:42, 42.94s/it]Train loss 0.004493: 100%|██████████| 4/4 [02:52<00:00, 43.38s/it]Train loss 0.004493: 100%|██████████| 4/4 [02:52<00:00, 43.06s/it]
+- Finish training epoch 47, training loss 0.004385, pos loss 0.004385, group loss 0.000000
+- Evaluating epoch 47
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.131273:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.131273: 100%|██████████| 1/1 [00:17<00:00, 17.43s/it]Valid loss 0.131273: 100%|██████████| 1/1 [00:17<00:00, 17.43s/it]
+- Finish eval epoch 47, validation loss 0.131273
+
+- Training epoch 48
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.005418:   0%|          | 0/4 [00:44<?, ?it/s]Train loss 0.005418:  25%|██▌       | 1/4 [00:44<02:13, 44.35s/it]Train loss 0.003229:  25%|██▌       | 1/4 [01:30<02:13, 44.35s/it]Train loss 0.003229:  50%|█████     | 2/4 [01:30<01:30, 45.38s/it]Train loss 0.003701:  50%|█████     | 2/4 [02:14<01:30, 45.38s/it]Train loss 0.003701:  75%|███████▌  | 3/4 [02:14<00:44, 44.94s/it]Train loss 0.004162:  75%|███████▌  | 3/4 [02:58<00:44, 44.94s/it]Train loss 0.004162: 100%|██████████| 4/4 [02:58<00:00, 44.28s/it]Train loss 0.004162: 100%|██████████| 4/4 [02:58<00:00, 44.53s/it]
+- Finish training epoch 48, training loss 0.004128, pos loss 0.004128, group loss 0.000000
+- Evaluating epoch 48
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.130424:   0%|          | 0/1 [00:16<?, ?it/s]Valid loss 0.130424: 100%|██████████| 1/1 [00:16<00:00, 16.86s/it]Valid loss 0.130424: 100%|██████████| 1/1 [00:16<00:00, 16.86s/it]
+- Finish eval epoch 48, validation loss 0.130424
+
+- Training epoch 49
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.003933:   0%|          | 0/4 [00:43<?, ?it/s]Generating video:   0%|          | 0/4 [00:43<?, ?it/s]   Generating video:  25%|██▌       | 1/4 [01:07<03:22, 67.40s/it]Train loss 0.003217:  25%|██▌       | 1/4 [01:55<03:22, 67.40s/it]Train loss 0.003217:  50%|█████     | 2/4 [01:55<01:52, 56.28s/it]Train loss 0.004310:  50%|█████     | 2/4 [02:40<01:52, 56.28s/it]Train loss 0.004310:  75%|███████▌  | 3/4 [02:40<00:51, 51.10s/it]Train loss 0.004112:  75%|███████▌  | 3/4 [03:27<00:51, 51.10s/it]Train loss 0.004112: 100%|██████████| 4/4 [03:27<00:00, 49.35s/it]Train loss 0.004112: 100%|██████████| 4/4 [03:27<00:00, 51.88s/it]
+- Finish training epoch 49, training loss 0.003893, pos loss 0.003893, group loss 0.000000
+- Evaluating epoch 49
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.130921:   0%|          | 0/1 [00:17<?, ?it/s]Generating video:   0%|          | 0/1 [00:17<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:40<00:00, 40.00s/it]Generating video: 100%|██████████| 1/1 [00:40<00:00, 40.00s/it]
+- Finish eval epoch 49, validation loss 0.130921
+

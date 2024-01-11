@@ -1,0 +1,132 @@
+- Overwrite config params ['loss_type', 'dataset', 'run_dir', 'n_frames_eval', 'group_loss_weight'].
+- Configuration:
+batch_size: 50
+batchnorm: True
+conv_temp_encoder: False
+dataset: CConvFluid
+debug: False
+group_loss_weight: 0.0
+load_path: 
+log_eval: True
+loss_type: chamfer
+lr: 0.0001
+n_epochs: 50
+n_frames: 4
+n_frames_eval: 10
+pred_hidden: 2048
+recur_pred: False
+run_dir: /workspace/VGPL-Visual-Prior/experiments/cconv_fluid
+single_out: False
+temp_embedding_size: 1024
+temp_reg_lam: 0.0
+use_temp_encoder: False
+vis: True
+vis_eval: True
+vis_eval_every: 50
+vis_every: 5
+vis_frames_per_sample: 64
+vis_samples: 5
+- Model architecture:
+PointSetNet(
+  (encoder): Encoder(
+    (net): Sequential(
+      (0): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(12, 32, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(32, 64, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (1): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (2): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (3): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+    )
+  )
+  (predictor): Predictor(
+    (pos_head): Sequential(
+      (0): Linear(in_features=5120, out_features=2048, bias=True)
+      (1): Linear(in_features=2048, out_features=36000, bias=True)
+    )
+    (group_head): Sequential(
+      (0): Linear(in_features=5120, out_features=2048, bias=True)
+      (1): Linear(in_features=2048, out_features=12000, bias=True)
+    )
+  )
+)
+- Training start
+- Training epoch 0
+  0%|          | 0/4 [00:00<?, ?it/s]  0%|          | 0/4 [03:40<?, ?it/s]
+Traceback (most recent call last):
+  File "train.py", line 444, in <module>
+    main(args)
+  File "train.py", line 326, in main
+    train_pos_loss, train_grp_loss) = step(
+  File "train.py", line 94, in step
+    pred_pos, pred_grp = model(step_images)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1186, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/workspace/VGPL-Visual-Prior/model.py", line 295, in forward
+    return self.predictor(z.view(z.shape[0], -1))
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1186, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/workspace/VGPL-Visual-Prior/model.py", line 94, in forward
+    pred_pos = self.pos_head(x).view(
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1186, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/container.py", line 154, in forward
+    input = module(input)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1186, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/linear.py", line 114, in forward
+    return F.linear(input, self.weight, self.bias)
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (50x61952 and 5120x2048)

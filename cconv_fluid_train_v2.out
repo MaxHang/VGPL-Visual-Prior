@@ -1,0 +1,554 @@
+- Overwrite config params ['loss_type', 'dataset', 'run_dir', 'n_frames_eval', 'group_loss_weight'].
+- Configuration:
+batch_size: 50
+batchnorm: True
+conv_temp_encoder: False
+dataset: CConvFluid
+debug: False
+group_loss_weight: 0.0
+load_path: 
+log_eval: True
+loss_type: l2
+lr: 0.0001
+n_epochs: 50
+n_frames: 4
+n_frames_eval: 10
+pred_hidden: 2048
+recur_pred: False
+run_dir: /workspace/VGPL-Visual-Prior/experiments/cconv_fluid
+single_out: False
+temp_embedding_size: 1024
+temp_reg_lam: 0.0
+use_temp_encoder: False
+vis: True
+vis_eval: True
+vis_eval_every: 50
+vis_every: 5
+vis_frames_per_sample: 64
+vis_samples: 5
+- Model architecture:
+PointSetNet(
+  (encoder): Encoder(
+    (net): Sequential(
+      (0): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(12, 32, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(32, 64, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (1): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (2): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (3): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+    )
+  )
+  (predictor): Predictor(
+    (pos_head): Sequential(
+      (0): Linear(in_features=5120, out_features=2048, bias=True)
+      (1): Linear(in_features=2048, out_features=72000, bias=True)
+    )
+    (group_head): Sequential(
+      (0): Linear(in_features=5120, out_features=2048, bias=True)
+      (1): Linear(in_features=2048, out_features=24000, bias=True)
+    )
+  )
+)
+- Training start
+- Training epoch 0
+
+  0%|          | 0/4 [00:00<?, ?it/s]
+Train loss 0.000113:   0%|          | 0/4 [00:08<?, ?it/s]
+Train loss 0.000113:  25%|██▌       | 1/4 [00:08<00:24,  8.11s/it]
+Train loss 0.000113:  25%|██▌       | 1/4 [00:10<00:31, 10.50s/it]
+Traceback (most recent call last):
+  File "train.py", line 444, in <module>
+    main(args)
+  File "train.py", line 324, in main
+    for images, positions, groups in pbar:
+  File "/opt/conda/lib/python3.8/site-packages/tqdm/std.py", line 1195, in __iter__
+    for obj in iterable:
+  File "/opt/conda/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 668, in __next__
+    data = self._next_data()
+  File "/opt/conda/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 706, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/opt/conda/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 49, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/opt/conda/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 49, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/workspace/VGPL-Visual-Prior/dataset.py", line 106, in __getitem__
+    images, positions = _load_data(data_path)
+  File "/workspace/VGPL-Visual-Prior/dataset.py", line 33, in _load_data
+    hf = h5py.File(path, 'r')
+  File "/opt/conda/lib/python3.8/site-packages/h5py/_hl/files.py", line 562, in __init__
+    fid = make_fid(name, mode, userblock_size, fapl, fcpl, swmr=swmr)
+  File "/opt/conda/lib/python3.8/site-packages/h5py/_hl/files.py", line 235, in make_fid
+    fid = h5f.open(name, flags, fapl=fapl)
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5f.pyx", line 102, in h5py.h5f.open
+FileNotFoundError: [Errno 2] Unable to synchronously open file (unable to open file: name = '/datasets/VGPL-Visual-Prior/datasets/data_cconv_fluid_6kbox_21times_120X160/train_vision/0.h5', errno = 2, error message = 'No such file or directory', flags = 0, o_flags = 0)
+
+
+
+- Overwrite config params ['loss_type', 'dataset', 'run_dir', 'n_frames_eval', 'group_loss_weight'].
+- Configuration:
+batch_size: 50
+batchnorm: True
+conv_temp_encoder: False
+dataset: CConvFluid
+debug: False
+group_loss_weight: 0.0
+load_path: 
+log_eval: True
+loss_type: l2
+lr: 0.0001
+n_epochs: 50
+n_frames: 4
+n_frames_eval: 10
+pred_hidden: 2048
+recur_pred: False
+run_dir: /workspace/VGPL-Visual-Prior/experiments/cconv_fluid
+single_out: False
+temp_embedding_size: 1024
+temp_reg_lam: 0.0
+use_temp_encoder: False
+vis: True
+vis_eval: True
+vis_eval_every: 50
+vis_every: 5
+vis_frames_per_sample: 64
+vis_samples: 5
+- Model architecture:
+PointSetNet(
+  (encoder): Encoder(
+    (net): Sequential(
+      (0): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(12, 32, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(32, 64, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (1): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (2): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (3): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+    )
+  )
+  (predictor): Predictor(
+    (pos_head): Sequential(
+      (0): Linear(in_features=5120, out_features=2048, bias=True)
+      (1): Linear(in_features=2048, out_features=72000, bias=True)
+    )
+    (group_head): Sequential(
+      (0): Linear(in_features=5120, out_features=2048, bias=True)
+      (1): Linear(in_features=2048, out_features=24000, bias=True)
+    )
+  )
+)
+- Training start
+- Training epoch 0
+
+  0%|          | 0/4 [00:00<?, ?it/s]
+Train loss 0.000115:   0%|          | 0/4 [00:08<?, ?it/s]
+Train loss 0.000115:  25%|██▌       | 1/4 [00:08<00:25,  8.55s/it]
+Train loss 0.000024:  25%|██▌       | 1/4 [00:15<00:25,  8.55s/it]
+Train loss 0.000024:  50%|█████     | 2/4 [00:15<00:15,  7.56s/it]
+Train loss 0.000002:  50%|█████     | 2/4 [00:21<00:15,  7.56s/it]
+Train loss 0.000002:  75%|███████▌  | 3/4 [00:21<00:07,  7.03s/it]
+Train loss 0.000000:  75%|███████▌  | 3/4 [00:28<00:07,  7.03s/it]
+Train loss 0.000000: 100%|██████████| 4/4 [00:28<00:00,  6.82s/it]
+Train loss 0.000000: 100%|██████████| 4/4 [00:28<00:00,  7.08s/it]
+- Finish training epoch 0, training loss 0.000035, pos loss 0.000035, group loss 0.000000
+- Evaluating epoch 0
+
+  0%|          | 0/1 [00:00<?, ?it/s]
+Valid loss 3887856227317333360640.000000:   0%|          | 0/1 [00:01<?, ?it/s]
+Valid loss 3887856227317333360640.000000: 100%|██████████| 1/1 [00:01<00:00,  1.79s/it]
+Valid loss 3887856227317333360640.000000: 100%|██████████| 1/1 [00:01<00:00,  1.79s/it]
+- Finish eval epoch 0, validation loss 3887856227317333360640.000000
+- Best model
+
+- Training epoch 1
+
+  0%|          | 0/4 [00:00<?, ?it/s]
+Train loss 0.000000:   0%|          | 0/4 [00:06<?, ?it/s]
+Train loss 0.000000:  25%|██▌       | 1/4 [00:06<00:20,  6.72s/it]
+Train loss 0.000000:  25%|██▌       | 1/4 [00:12<00:20,  6.72s/it]
+Train loss 0.000000:  50%|█████     | 2/4 [00:12<00:12,  6.27s/it]
+Train loss 0.000000:  50%|█████     | 2/4 [00:17<00:12,  6.27s/it]
+Train loss 0.000000:  75%|███████▌  | 3/4 [00:17<00:05,  5.79s/it]
+Train loss 0.000000:  75%|███████▌  | 3/4 [00:24<00:05,  5.79s/it]
+Train loss 0.000000: 100%|██████████| 4/4 [00:24<00:00,  5.92s/it]
+Train loss 0.000000: 100%|██████████| 4/4 [00:24<00:00,  6.00s/it]
+- Finish training epoch 1, training loss 0.000000, pos loss 0.000000, group loss 0.000000
+- Evaluating epoch 1
+
+  0%|          | 0/1 [00:00<?, ?it/s]
+Valid loss nan:   0%|          | 0/1 [00:02<?, ?it/s]
+Valid loss nan: 100%|██████████| 1/1 [00:02<00:00,  2.09s/it]
+Valid loss nan: 100%|██████████| 1/1 [00:02<00:00,  2.09s/it]
+- Finish eval epoch 1, validation loss nan
+
+- Training epoch 2
+
+  0%|          | 0/4 [00:00<?, ?it/s]
+Train loss 0.000000:   0%|          | 0/4 [00:05<?, ?it/s]
+Train loss 0.000000:  25%|██▌       | 1/4 [00:05<00:17,  5.98s/it]
+Train loss 0.000000:  25%|██▌       | 1/4 [00:10<00:17,  5.98s/it]
+Train loss 0.000000:  50%|█████     | 2/4 [00:10<00:10,  5.36s/it]
+Train loss 0.000000:  50%|█████     | 2/4 [00:16<00:10,  5.36s/it]
+Train loss 0.000000:  75%|███████▌  | 3/4 [00:16<00:05,  5.54s/it]
+Train loss 0.000000:  75%|███████▌  | 3/4 [00:23<00:05,  5.54s/it]
+Train loss 0.000000: 100%|██████████| 4/4 [00:23<00:00,  5.87s/it]
+Train loss 0.000000: 100%|██████████| 4/4 [00:23<00:00,  5.76s/it]
+- Finish training epoch 2, training loss 0.000000, pos loss 0.000000, group loss 0.000000
+- Evaluating epoch 2
+
+  0%|          | 0/1 [00:00<?, ?it/s]
+Valid loss nan:   0%|          | 0/1 [00:02<?, ?it/s]
+Valid loss nan: 100%|██████████| 1/1 [00:02<00:00,  2.19s/it]
+Valid loss nan: 100%|██████████| 1/1 [00:02<00:00,  2.19s/it]
+- Finish eval epoch 2, validation loss nan
+
+- Training epoch 3
+
+  0%|          | 0/4 [00:00<?, ?it/s]
+Train loss 0.000000:   0%|          | 0/4 [00:05<?, ?it/s]
+Train loss 0.000000:  25%|██▌       | 1/4 [00:05<00:15,  5.23s/it]
+Train loss 0.000000:  25%|██▌       | 1/4 [00:10<00:15,  5.23s/it]
+Train loss 0.000000:  50%|█████     | 2/4 [00:10<00:11,  5.52s/it]
+Train loss 0.000000:  50%|█████     | 2/4 [00:16<00:11,  5.52s/it]
+Train loss 0.000000:  75%|███████▌  | 3/4 [00:16<00:05,  5.76s/it]
+Train loss 0.000000:  75%|███████▌  | 3/4 [00:22<00:05,  5.76s/it]
+Train loss 0.000000: 100%|██████████| 4/4 [00:22<00:00,  5.75s/it]
+Train loss 0.000000: 100%|██████████| 4/4 [00:22<00:00,  5.69s/it]
+- Finish training epoch 3, training loss 0.000000, pos loss 0.000000, group loss 0.000000
+- Evaluating epoch 3
+
+  0%|          | 0/1 [00:00<?, ?it/s]
+Valid loss nan:   0%|          | 0/1 [00:01<?, ?it/s]
+Valid loss nan: 100%|██████████| 1/1 [00:01<00:00,  1.96s/it]
+Valid loss nan: 100%|██████████| 1/1 [00:01<00:00,  1.96s/it]
+- Finish eval epoch 3, validation loss nan
+
+- Training epoch 4
+
+  0%|          | 0/4 [00:00<?, ?it/s]
+Train loss 0.000000:   0%|          | 0/4 [00:05<?, ?it/s]
+Generating video:   0%|          | 0/4 [00:05<?, ?it/s]   
+Generating video:   0%|          | 0/4 [00:06<?, ?it/s]
+Traceback (most recent call last):
+  File "train.py", line 444, in <module>
+    main(args)
+  File "train.py", line 337, in main
+    visualize(config, model, epoch, n_particles,
+  File "train.py", line 176, in visualize
+    pred_pos, pred_grp = model(vis_images)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1186, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/workspace/VGPL-Visual-Prior/model.py", line 294, in forward
+    z = self.encoder(x)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1186, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/workspace/VGPL-Visual-Prior/model.py", line 68, in forward
+    return self.net(x)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1186, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/container.py", line 154, in forward
+    input = module(input)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1186, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/workspace/VGPL-Visual-Prior/model.py", line 50, in forward
+    z = self.input_net(x)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1186, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/container.py", line 154, in forward
+    input = module(input)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1186, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/conv.py", line 463, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/conv.py", line 459, in _conv_forward
+    return F.conv2d(input, weight, bias, self.stride,
+RuntimeError: Given groups=1, weight of size [32, 12, 3, 3], expected input[5, 9, 120, 160] to have 12 channels, but got 9 channels instead
+
+
+
+
+
+
+
+
+- Overwrite config params ['loss_type', 'dataset', 'run_dir', 'n_frames_eval', 'group_loss_weight'].
+- Configuration:
+batch_size: 50
+batchnorm: True
+conv_temp_encoder: False
+dataset: CConvFluid
+debug: False
+group_loss_weight: 0.0
+load_path: 
+log_eval: True
+loss_type: l2
+lr: 0.0001
+n_epochs: 50
+n_frames: 4
+n_frames_eval: 10
+pred_hidden: 2048
+recur_pred: False
+run_dir: /workspace/VGPL-Visual-Prior/experiments/cconv_fluid
+single_out: False
+temp_embedding_size: 1024
+temp_reg_lam: 0.0
+use_temp_encoder: False
+vis: True
+vis_eval: True
+vis_eval_every: 50
+vis_every: 5
+vis_frames_per_sample: 64
+vis_samples: 5
+- Model architecture:
+PointSetNet(
+  (encoder): Encoder(
+    (net): Sequential(
+      (0): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(12, 32, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(32, 64, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (1): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (2): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (3): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+    )
+  )
+  (predictor): Predictor(
+    (pos_head): Sequential(
+      (0): Linear(in_features=5120, out_features=2048, bias=True)
+      (1): Linear(in_features=2048, out_features=72000, bias=True)
+    )
+    (group_head): Sequential(
+      (0): Linear(in_features=5120, out_features=2048, bias=True)
+      (1): Linear(in_features=2048, out_features=24000, bias=True)
+    )
+  )
+)
+- Training start
+- Training epoch 0
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.331436:   0%|          | 0/4 [02:21<?, ?it/s]Train loss 0.331436:  25%|██▌       | 1/4 [02:21<07:05, 141.92s/it]Train loss 0.144646:  25%|██▌       | 1/4 [04:45<07:05, 141.92s/it]Train loss 0.144646:  50%|█████     | 2/4 [04:45<04:46, 143.00s/it]Train loss 0.133538:  50%|█████     | 2/4 [07:54<04:46, 143.00s/it]Train loss 0.133538:  75%|███████▌  | 3/4 [07:54<02:43, 163.97s/it]Train loss 0.129594:  75%|███████▌  | 3/4 [10:45<02:43, 163.97s/it]Train loss 0.129594: 100%|██████████| 4/4 [10:45<00:00, 166.76s/it]Train loss 0.129594: 100%|██████████| 4/4 [10:45<00:00, 161.41s/it]
+- Finish training epoch 0, training loss 0.184803, pos loss 0.184803, group loss 0.000000
+- Evaluating epoch 0
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.137273:   0%|          | 0/1 [01:14<?, ?it/s]Valid loss 0.137273: 100%|██████████| 1/1 [01:14<00:00, 74.20s/it]Valid loss 0.137273: 100%|██████████| 1/1 [01:14<00:00, 74.20s/it]
+- Finish eval epoch 0, validation loss 0.137273
+- Best model
+
+- Training epoch 1
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.120865:   0%|          | 0/4 [03:02<?, ?it/s]Train loss 0.120865:  25%|██▌       | 1/4 [03:02<09:07, 182.53s/it]Train loss 0.113507:  25%|██▌       | 1/4 [06:00<09:07, 182.53s/it]Train loss 0.113507:  50%|█████     | 2/4 [06:00<05:59, 179.83s/it]Train loss 0.111904:  50%|█████     | 2/4 [08:43<05:59, 179.83s/it]Train loss 0.111904:  75%|███████▌  | 3/4 [08:43<02:51, 171.99s/it]Train loss 0.115460:  75%|███████▌  | 3/4 [11:49<02:51, 171.99s/it]Train loss 0.115460: 100%|██████████| 4/4 [11:49<00:00, 177.58s/it]Train loss 0.115460: 100%|██████████| 4/4 [11:49<00:00, 177.32s/it]
+- Finish training epoch 1, training loss 0.115434, pos loss 0.115434, group loss 0.000000
+- Evaluating epoch 1
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.129241:   0%|          | 0/1 [01:33<?, ?it/s]Valid loss 0.129241: 100%|██████████| 1/1 [01:33<00:00, 93.36s/it]Valid loss 0.129241: 100%|██████████| 1/1 [01:33<00:00, 93.36s/it]
+- Finish eval epoch 1, validation loss 0.129241
+- Best model
+
+- Training epoch 2
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.111540:   0%|          | 0/4 [03:39<?, ?it/s]Train loss 0.111540:  25%|██▌       | 1/4 [03:39<10:58, 219.62s/it]Train loss 0.097636:  25%|██▌       | 1/4 [07:11<10:58, 219.62s/it]Train loss 0.097636:  50%|█████     | 2/4 [07:11<07:10, 215.00s/it]Train loss 0.093490:  50%|█████     | 2/4 [09:44<07:10, 215.00s/it]Train loss 0.093490:  75%|███████▌  | 3/4 [09:44<03:06, 186.93s/it]Train loss 0.101241:  75%|███████▌  | 3/4 [13:21<03:06, 186.93s/it]Train loss 0.101241: 100%|██████████| 4/4 [13:21<00:00, 198.44s/it]Train loss 0.101241: 100%|██████████| 4/4 [13:21<00:00, 200.25s/it]
+- Finish training epoch 2, training loss 0.100977, pos loss 0.100977, group loss 0.000000
+- Evaluating epoch 2
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.112652:   0%|          | 0/1 [01:06<?, ?it/s]Valid loss 0.112652: 100%|██████████| 1/1 [01:06<00:00, 66.16s/it]Valid loss 0.112652: 100%|██████████| 1/1 [01:06<00:00, 66.16s/it]
+- Finish eval epoch 2, validation loss 0.112652
+- Best model
+
+- Training epoch 3
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.092385:   0%|          | 0/4 [02:54<?, ?it/s]Train loss 0.092385:  25%|██▌       | 1/4 [02:54<08:43, 174.43s/it]Train loss 0.093897:  25%|██▌       | 1/4 [05:39<08:43, 174.43s/it]Train loss 0.093897:  50%|█████     | 2/4 [05:39<05:38, 169.08s/it]Train loss 0.086202:  50%|█████     | 2/4 [08:27<05:38, 169.08s/it]Train loss 0.086202:  75%|███████▌  | 3/4 [08:27<02:48, 168.33s/it]Train loss 0.091173:  75%|███████▌  | 3/4 [11:11<02:48, 168.33s/it]Train loss 0.091173: 100%|██████████| 4/4 [11:11<00:00, 166.58s/it]Train loss 0.091173: 100%|██████████| 4/4 [11:11<00:00, 167.78s/it]
+- Finish training epoch 3, training loss 0.090914, pos loss 0.090914, group loss 0.000000
+- Evaluating epoch 3
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.121843:   0%|          | 0/1 [01:08<?, ?it/s]Valid loss 0.121843: 100%|██████████| 1/1 [01:08<00:00, 68.69s/it]Valid loss 0.121843: 100%|██████████| 1/1 [01:08<00:00, 68.69s/it]
+- Finish eval epoch 3, validation loss 0.121843
+
+- Training epoch 4
+  0%|          | 0/4 [00:00<?, ?it/s]Train loss 0.087451:   0%|          | 0/4 [02:45<?, ?it/s]Generating video:   0%|          | 0/4 [02:45<?, ?it/s]   Generating video:   0%|          | 0/4 [02:45<?, ?it/s]
+Traceback (most recent call last):
+  File "train.py", line 444, in <module>
+    main(args)
+  File "train.py", line 337, in main
+    visualize(config, model, epoch, n_particles,
+  File "train.py", line 176, in visualize
+    pred_pos, pred_grp = model(vis_images)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1186, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/workspace/VGPL-Visual-Prior/model.py", line 294, in forward
+    z = self.encoder(x)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1186, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/workspace/VGPL-Visual-Prior/model.py", line 68, in forward
+    return self.net(x)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1186, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/container.py", line 154, in forward
+    input = module(input)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1186, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/workspace/VGPL-Visual-Prior/model.py", line 50, in forward
+    z = self.input_net(x)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1186, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/container.py", line 154, in forward
+    input = module(input)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1186, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/conv.py", line 463, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/opt/conda/lib/python3.8/site-packages/torch/nn/modules/conv.py", line 459, in _conv_forward
+    return F.conv2d(input, weight, bias, self.stride,
+RuntimeError: Given groups=1, weight of size [32, 12, 3, 3], expected input[5, 9, 120, 160] to have 12 channels, but got 9 channels instead

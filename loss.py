@@ -68,13 +68,14 @@ def chamfer_loss_with_grouping(x, gx, y, gy):
     """
     B, T, _, N = x.shape
 
-    x = x.view(B, 3*T, N)
+    x = x.reshape(B, 3*T, N)
     x = x.permute(0, 2, 1)
     x = torch.unsqueeze(x, 1)
+    # 参数N表示在该维度上复制扩展N次, 6000爆内存了
     x = x.repeat(1, N, 1, 1)
     x = x.transpose(1, 2)
 
-    y = y.view(B, 3*T, N)
+    y = y.reshape(B, 3*T, N)
     y = y.permute(0, 2, 1)
     y = torch.unsqueeze(y, 1)
     y = y.repeat(1, N, 1, 1)

@@ -16,6 +16,8 @@ from model import PointSetNet
 from train import step, visualize
 from utils import toy_render
 
+from cd_loss_utils import chamfer_dist
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--config_path', type=str, default=None)
 parser.add_argument('--set', nargs='+')
@@ -40,9 +42,16 @@ def visualize_outputs(pos, grp, section_id, save_dir, zlim):
         zlim=zlim)
 
     imageio.mimwrite(
-        os.path.join(save_dir, 'output_{}.mp4'.format(section_id)),
+        os.path.join(save_dir, 'output_{}.gif'.format(section_id)),
         vis_frames,
-        fps=5)
+        'GIF',
+        fps=5
+    )
+    
+    # imageio.mimwrite(
+    #     os.path.join(save_dir, 'output_{}.mp4'.format(section_id)),
+    #     vis_frames,
+    #     fps=5)
 
 
 def generate_outputs(config, model, n_traj, images, save_dir):
@@ -105,6 +114,14 @@ def generate_outputs(config, model, n_traj, images, save_dir):
                 h5f = h5py.File(os.path.join(data_dir, str(j) + '.h5'), 'w')
                 h5f.create_dataset('positions', data=t_pos)
                 h5f.create_dataset('groups', data=t_grp)
+                
+                if config.cal_vel:
+                    pred_pos_cur_frame  = pred_pos[i, j:j+config.n_frames_eval-1, ...]
+                    pred_pos_next_frame = pred_pos[i, j+1:j+config.n_frames_eval, ...]
+                    d1, d2, _, _ = chamfer_dist(pred_pos_cur_frame, pred_pos_next_frame)
+
+                    t_vel = (d1 / config.cal_vel_time_dif).detach().cpu().numpy()
+                    h5f.create_dataset('velocities', data=t_vel)
 
     else:
         # config.n_frames < config.n_frames_eval
@@ -120,8 +137,12 @@ def generate_outputs(config, model, n_traj, images, save_dir):
         for j in range(T - config.n_frames + 1):
             # pred_pos (B, n_frames, 3, N) -> (B, n_frames, N, 3)
             # pred_grp (B, n_frames, N, G)
-            pred_pos, pred_grp = model(
-                images[:, j:j + config.n_frames, ...].to(_DEVICE))
+            # pred_pos, pred_grp = model(
+            #     images[:, j:j + config.n_frames, ...].to(_DEVICE))
+            step_images = images[:, j:j + config.n_frames, ...].to(_DEVICE)
+            if not step_images.is_contiguous():
+                step_images = step_images.contiguous()
+            pred_pos, pred_grp = model(step_images)
             pred_pos = pred_pos.permute(0, 1, 3, 2)
 
             if j == 0:
@@ -164,10 +185,19 @@ def generate_outputs(config, model, n_traj, images, save_dir):
                     i, j:j+config.n_frames_eval, ...]  # (t, N, 3)
                 t_grp = last_frames_grp[
                     i, j:j+config.n_frames_eval, ...]  # (t, N, G)
+                
 
                 h5f = h5py.File(os.path.join(data_dir, str(j) + '.h5'), 'w')
                 h5f.create_dataset('positions', data=t_pos)
                 h5f.create_dataset('groups', data=t_grp)
+
+                if config.cal_vel:
+                    pred_pos_cur_frame  = pred_pos[i, j:j+config.n_frames_eval-1, ...]
+                    pred_pos_next_frame = pred_pos[i, j+1:j+config.n_frames_eval, ...]
+                    d1, d2, _, _ = chamfer_dist(pred_pos_cur_frame, pred_pos_next_frame)
+
+                    t_vel = (d1 / config.cal_vel_time_dif).detach().cpu().numpy()
+                    h5f.create_dataset('velocities', data=t_vel)
 
     return n_traj + B
 
@@ -185,6 +215,9 @@ def main(args):
     elif config.dataset == 'MassRope':
         n_groups = 2
         n_particles = 95
+    elif config.dataset == 'CConvFluid' or config.dataset == 'CConvFluid801times':
+        n_groups = 1
+        n_particles = 6000
     else:
         raise ValueError('Unsupported environment')
 
@@ -201,6 +234,10 @@ def main(args):
         config.batchnorm,
         single_out=False,
         recur_pred=config.recur_pred).to(_DEVICE)
+    
+    print("Model's state_dict:")
+    for param_tensor in model.state_dict():
+        print(param_tensor, "\t", model.state_dict()[param_tensor].size())
 
     # a model checkpoint must be loaded
     if config.load_path != '':
@@ -240,6 +277,9 @@ def main(args):
             loader_loss = []
 
         for images, positions, groups in pbar:
+            # torch.Size([50, 181, 3, 120, 160])
+            # torch.Size([50, 181, 95, 3])
+            # torch.Size([50, 95])
             if config.log_eval:
                 model, _, loss, pos_loss, grp_loss = step(
                     config, model, None, images, positions, groups, False)

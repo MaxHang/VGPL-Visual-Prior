@@ -15,6 +15,7 @@ import utils
 from dataset import denormalize, get_dataloader
 from loss import chamfer_loss_with_grouping
 from model import PointSetNet, get_pos_diff
+from cd_loss_utils import chamfer
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--config_path', type=str, default=None)
@@ -56,7 +57,9 @@ def step(config, model, optimizer, images, positions, groups, is_train):
         groups: (B, N)
     """
     _, _, C, H, W = images.shape
+    # torch.Size([50, 181, 3, 120, 160])
     B, T, N, _ = positions.shape
+    # torch.Size([50, 181, 95, 3])
 
     if is_train:
         model.train()
@@ -65,6 +68,7 @@ def step(config, model, optimizer, images, positions, groups, is_train):
 
     # stack groups (B, N) -> (B, T, N)
     groups = groups.unsqueeze(1).repeat(1, config.n_frames, 1)
+    # torch.Size([50, 4, 95])
 
     # shuffle on the time dimension
     if is_train:
@@ -79,9 +83,9 @@ def step(config, model, optimizer, images, positions, groups, is_train):
     batch_position_loss = 0
     for i in range(step_idxs.shape[1]):
         # Send to GPU after slicing to save memory
-        step_images = get_batch_data(
+        step_images = get_batch_data( # torch.Size([50, 4, 3, 120, 160])
             images, step_idxs, i, config.n_frames).to(_DEVICE)
-        step_positions = get_batch_data(
+        step_positions = get_batch_data( # torch.Size([50, 4, 3, 95])
             positions, step_idxs, i,
             config.n_frames).transpose(2, 3).to(_DEVICE)
         step_groups = groups.long().to(_DEVICE)
@@ -89,6 +93,8 @@ def step(config, model, optimizer, images, positions, groups, is_train):
         # pred_pos (B, 1, 3, N) if single_out else (B, T, 3, N)
         # pred_grp (B, 1, N, G) if single_out else (B, T, N, G)
         pred_pos, pred_grp = model(step_images)
+        # torch.Size([50, 4, 3, 95])
+        # torch.Size([50, 4, 95, 2])
 
         # only use last frame from ground truth to calculate loss
         if config.single_out \
@@ -110,10 +116,18 @@ def step(config, model, optimizer, images, positions, groups, is_train):
             gt_groups = gt_groups.permute(2, 0, 1)
             grp_loss = F.cross_entropy(pred_grp, gt_groups)
         elif config.loss_type == 'chamfer':
-            gt_groups = torch.zeros_like(pred_grp).scatter_(
-                -1, gt_groups.unsqueeze(-1), 1)  # (B, T, N, G)
-            pos_loss, grp_loss = chamfer_loss_with_grouping(
-                gt_positions, gt_groups, pred_pos, pred_grp)
+            # gt_groups = torch.zeros_like(pred_grp).scatter_(
+            #     -1, gt_groups.unsqueeze(-1), 1)  # (B, T, N, G)
+            # pos_loss, grp_loss = chamfer_loss_with_grouping(
+            #     gt_positions, gt_groups, pred_pos, pred_grp).
+            B, T, _, N = gt_positions.shape
+            gt_positions = gt_positions.reshape(B*T, _, N).transpose(1, 2)
+            pred_pos = pred_pos.reshape(B*T, _, N).transpose(1, 2)
+            if i == 0:
+                print(f'gt_positions.shape: {gt_positions.shape}')
+                print(f'pred_pos.shape: {pred_pos.shape}')
+            pos_loss = chamfer(gt_positions, pred_pos)
+            grp_loss = torch.zeros((1), device=gt_groups.device)
         else:
             raise ValueError(
                 'Invalid loss type {}'.format(config.loss_type))
@@ -171,9 +185,12 @@ def visualize(config, model, epoch, n_particles, images,
         pred_pos, pred_grp = model(vis_images)
 
         # Take the last time step
-        new_gt_pos = gt_pos[:, -1, ...].detach().cpu().unsqueeze(1).numpy()
-        new_pred_pos = pred_pos[:, -1, ...].detach().cpu().unsqueeze(1).numpy()
-        new_pred_grp = pred_grp[:, -1, ...].detach().cpu().unsqueeze(1).numpy()
+        new_gt_pos = gt_pos[:, 0, ...].detach().cpu().unsqueeze(1).numpy()
+        new_pred_pos = pred_pos[:, 0, ...].detach().cpu().unsqueeze(1).numpy()
+        new_pred_grp = pred_grp[:, 0, ...].detach().cpu().unsqueeze(1).numpy()
+        # new_gt_pos = gt_pos[:, -1, ...].detach().cpu().unsqueeze(1).numpy()
+        # new_pred_pos = pred_pos[:, -1, ...].detach().cpu().unsqueeze(1).numpy()
+        # new_pred_grp = pred_grp[:, -1, ...].detach().cpu().unsqueeze(1).numpy()
         if vis_gt_pos is None:
             vis_gt_pos = new_gt_pos
             vis_pred_pos = new_pred_pos
@@ -200,17 +217,21 @@ def visualize(config, model, epoch, n_particles, images,
         # use special z-axis range for MassRope visualization
         if config.dataset == 'MassRope':
             zlim = (0.3, 1.7)
+        if config.dataset == 'CConvFluid' or config.dataset == 'CConvFluid801times':
+            zlim = (0, 4)
         else:
             zlim = (0, 0.7)
 
         # visualize ground truth groups (N,)
         vis_gt_frames = utils.toy_render(
+            # vis_gt_pos[k], (0, 2, 1),
             np.transpose(vis_gt_pos[k], (0, 2, 1)),
             title='Ground Truth',
             gt_groups=groups[k],
             zlim=zlim)
 
         vis_pred_frames = utils.toy_render(
+            # vis_pred_pos[k],
             np.transpose(vis_pred_pos[k], (0, 2, 1)),
             title='Prediction',
             highlight_idxs=highlight_idxs,
@@ -222,15 +243,30 @@ def visualize(config, model, epoch, n_particles, images,
 
         imageio.mimwrite(
             os.path.join(
-                save_dir, 'sample{:02d}_input.mp4'.format(k)),
+                save_dir, 'sample{:02d}_input.gif'.format(k)),
             vis_input,
-            fps=15)
+            'GIF',
+            fps=5
+            )
         imageio.mimwrite(
             os.path.join(
                 save_dir,
-                'sample{:02d}_particles.mp4'.format(k)),
+                'sample{:02d}_particles.gif'.format(k)),
             vis_frames,
-            fps=15)
+            'GIF',
+            fps=15
+            )
+        # imageio.mimwrite(
+        #     os.path.join(
+        #         save_dir, 'sample{:02d}_input.mp4'.format(k)),
+        #     vis_input,
+        #     fps=15)
+        # imageio.mimwrite(
+        #     os.path.join(
+        #         save_dir,
+        #         'sample{:02d}_particles.mp4'.format(k)),
+        #     vis_frames,
+        #     fps=15)
 
 
 def main(args):
@@ -246,6 +282,10 @@ def main(args):
     elif config.dataset == 'MassRope':
         n_groups = 2
         n_particles = 95
+    elif config.dataset == 'CConvFluid' or config.dataset == 'CConvFluid801times':
+        n_groups = 1
+        # n_particles = 1080
+        n_particles = 6000
     else:
         raise ValueError('Unsupported environment')
 
@@ -296,9 +336,17 @@ def main(args):
             epoch_train_pos_losses = []
             epoch_train_grp_losses = []
 
+            # pbar = tqdm(valid_loader)
             pbar = tqdm(train_loader)
             did_vis = False
             for images, positions, groups in pbar:
+                # debug visualize 出错
+                # pbar.set_description('Generating video')
+                # visualize(config, model, epoch, n_particles,
+                #             images, positions, groups, True)
+                # did_vis = True
+
+
                 (model, optimizer, train_loss,
                  train_pos_loss, train_grp_loss) = step(
                     config, model, optimizer, images, positions, groups, True)

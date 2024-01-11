@@ -282,6 +282,8 @@ class PointSetNet(nn.Module):
 
     def forward(self, x):
         B, T, C, H, W = x.shape
+        if not x.is_contiguous():
+            x = x.contiguous()
         if not self._recur_pred:
             if self._use_temp_encoder:
                 x = x.view(B*T, C, H, W)
@@ -293,7 +295,9 @@ class PointSetNet(nn.Module):
                 return self.predictor(z.view(z.shape[0], -1))
         else:
             x = x.view(B*T, C, H, W)
-            z = self.encoder(x).view(B, T, 512*2*5)
+            # z = self.encoder(x).view(B, T, 512*2*5)
+            #自己改的
+            z = self.encoder(x).reshape(B, T, 512 * 2 * 5)
             pp, pg = self.predictor(z)
 
             if self._single_out:

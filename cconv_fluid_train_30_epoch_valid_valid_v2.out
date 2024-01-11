@@ -1,0 +1,353 @@
+- Overwrite config params ['loss_type', 'dataset', 'run_dir', 'n_frames_eval', 'group_loss_weight', 'vis_frames_per_sample', 'batch_size', 'n_epochs'].
+- Configuration:
+batch_size: 50
+batchnorm: True
+conv_temp_encoder: False
+dataset: CConvFluid
+debug: False
+group_loss_weight: 0.0
+load_path: 
+log_eval: True
+loss_type: l2
+lr: 0.0001
+n_epochs: 32
+n_frames: 4
+n_frames_eval: 10
+pred_hidden: 2048
+recur_pred: False
+run_dir: /workspace/VGPL-Visual-Prior/experiments/cconv_fluid_v2
+single_out: False
+temp_embedding_size: 1024
+temp_reg_lam: 0.0
+use_temp_encoder: False
+vis: True
+vis_eval: True
+vis_eval_every: 50
+vis_every: 5
+vis_frames_per_sample: 10
+vis_samples: 5
+- Model architecture:
+PointSetNet(
+  (encoder): Encoder(
+    (net): Sequential(
+      (0): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(12, 32, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(32, 64, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (1): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (2): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+      (3): StackedConvBlock(
+        (input_net): Sequential(
+          (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1))
+          (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+          (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1))
+          (4): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): ReLU()
+        )
+        (output_net): Sequential(
+          (0): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2))
+          (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU()
+        )
+      )
+    )
+  )
+  (predictor): Predictor(
+    (pos_head): Sequential(
+      (0): Linear(in_features=5120, out_features=2048, bias=True)
+      (1): Linear(in_features=2048, out_features=72000, bias=True)
+    )
+    (group_head): Sequential(
+      (0): Linear(in_features=5120, out_features=2048, bias=True)
+      (1): Linear(in_features=2048, out_features=24000, bias=True)
+    )
+  )
+)
+- Training start
+- Training epoch 0
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.386168:   0%|          | 0/1 [00:21<?, ?it/s]Train loss 0.386168: 100%|██████████| 1/1 [00:21<00:00, 21.18s/it]Train loss 0.386168: 100%|██████████| 1/1 [00:21<00:00, 21.18s/it]
+- Finish training epoch 0, training loss 0.386168, pos loss 0.386168, group loss 0.000000
+- Evaluating epoch 0
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.497699:   0%|          | 0/1 [00:16<?, ?it/s]Valid loss 0.497699: 100%|██████████| 1/1 [00:16<00:00, 16.77s/it]Valid loss 0.497699: 100%|██████████| 1/1 [00:16<00:00, 16.77s/it]
+- Finish eval epoch 0, validation loss 0.497699
+- Best model
+
+- Training epoch 1
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.134214:   0%|          | 0/1 [00:17<?, ?it/s]Train loss 0.134214: 100%|██████████| 1/1 [00:17<00:00, 17.33s/it]Train loss 0.134214: 100%|██████████| 1/1 [00:17<00:00, 17.33s/it]
+- Finish training epoch 1, training loss 0.134214, pos loss 0.134214, group loss 0.000000
+- Evaluating epoch 1
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.515123:   0%|          | 0/1 [00:16<?, ?it/s]Valid loss 0.515123: 100%|██████████| 1/1 [00:16<00:00, 16.20s/it]Valid loss 0.515123: 100%|██████████| 1/1 [00:16<00:00, 16.20s/it]
+- Finish eval epoch 1, validation loss 0.515123
+
+- Training epoch 2
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.103797:   0%|          | 0/1 [00:19<?, ?it/s]Train loss 0.103797: 100%|██████████| 1/1 [00:19<00:00, 19.02s/it]Train loss 0.103797: 100%|██████████| 1/1 [00:19<00:00, 19.02s/it]
+- Finish training epoch 2, training loss 0.103797, pos loss 0.103797, group loss 0.000000
+- Evaluating epoch 2
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.115896:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.115896: 100%|██████████| 1/1 [00:18<00:00, 18.95s/it]Valid loss 0.115896: 100%|██████████| 1/1 [00:18<00:00, 18.95s/it]
+- Finish eval epoch 2, validation loss 0.115896
+- Best model
+
+- Training epoch 3
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.092358:   0%|          | 0/1 [00:16<?, ?it/s]Train loss 0.092358: 100%|██████████| 1/1 [00:16<00:00, 16.55s/it]Train loss 0.092358: 100%|██████████| 1/1 [00:16<00:00, 16.55s/it]
+- Finish training epoch 3, training loss 0.092358, pos loss 0.092358, group loss 0.000000
+- Evaluating epoch 3
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.086004:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.086004: 100%|██████████| 1/1 [00:18<00:00, 18.53s/it]Valid loss 0.086004: 100%|██████████| 1/1 [00:18<00:00, 18.53s/it]
+- Finish eval epoch 3, validation loss 0.086004
+- Best model
+
+- Training epoch 4
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.080104:   0%|          | 0/1 [00:17<?, ?it/s]Generating video:   0%|          | 0/1 [00:17<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:39<00:00, 39.89s/it]Generating video: 100%|██████████| 1/1 [00:39<00:00, 39.89s/it]
+- Finish training epoch 4, training loss 0.080104, pos loss 0.080104, group loss 0.000000
+- Evaluating epoch 4
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.073880:   0%|          | 0/1 [00:17<?, ?it/s]Generating video:   0%|          | 0/1 [00:17<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:38<00:00, 38.78s/it]Generating video: 100%|██████████| 1/1 [00:38<00:00, 38.78s/it]
+- Finish eval epoch 4, validation loss 0.073880
+- Best model
+
+- Training epoch 5
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.066011:   0%|          | 0/1 [00:18<?, ?it/s]Train loss 0.066011: 100%|██████████| 1/1 [00:18<00:00, 18.15s/it]Train loss 0.066011: 100%|██████████| 1/1 [00:18<00:00, 18.15s/it]
+- Finish training epoch 5, training loss 0.066011, pos loss 0.066011, group loss 0.000000
+- Evaluating epoch 5
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.059782:   0%|          | 0/1 [00:16<?, ?it/s]Valid loss 0.059782: 100%|██████████| 1/1 [00:16<00:00, 16.66s/it]Valid loss 0.059782: 100%|██████████| 1/1 [00:16<00:00, 16.66s/it]
+- Finish eval epoch 5, validation loss 0.059782
+- Best model
+
+- Training epoch 6
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.054722:   0%|          | 0/1 [00:19<?, ?it/s]Train loss 0.054722: 100%|██████████| 1/1 [00:19<00:00, 19.06s/it]Train loss 0.054722: 100%|██████████| 1/1 [00:19<00:00, 19.06s/it]
+- Finish training epoch 6, training loss 0.054722, pos loss 0.054722, group loss 0.000000
+- Evaluating epoch 6
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.048630:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.048630: 100%|██████████| 1/1 [00:17<00:00, 17.69s/it]Valid loss 0.048630: 100%|██████████| 1/1 [00:17<00:00, 17.69s/it]
+/workspace/VGPL-Visual-Prior/utils/utils.py:128: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure()
+- Finish eval epoch 6, validation loss 0.048630
+- Best model
+
+- Training epoch 7
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.044602:   0%|          | 0/1 [00:18<?, ?it/s]Train loss 0.044602: 100%|██████████| 1/1 [00:18<00:00, 18.40s/it]Train loss 0.044602: 100%|██████████| 1/1 [00:18<00:00, 18.40s/it]
+- Finish training epoch 7, training loss 0.044602, pos loss 0.044602, group loss 0.000000
+- Evaluating epoch 7
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.040469:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.040469: 100%|██████████| 1/1 [00:17<00:00, 17.69s/it]Valid loss 0.040469: 100%|██████████| 1/1 [00:17<00:00, 17.69s/it]
+- Finish eval epoch 7, validation loss 0.040469
+- Best model
+
+- Training epoch 8
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.035638:   0%|          | 0/1 [00:17<?, ?it/s]Train loss 0.035638: 100%|██████████| 1/1 [00:17<00:00, 17.32s/it]Train loss 0.035638: 100%|██████████| 1/1 [00:17<00:00, 17.32s/it]
+- Finish training epoch 8, training loss 0.035638, pos loss 0.035638, group loss 0.000000
+- Evaluating epoch 8
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.030589:   0%|          | 0/1 [00:16<?, ?it/s]Valid loss 0.030589: 100%|██████████| 1/1 [00:16<00:00, 16.46s/it]Valid loss 0.030589: 100%|██████████| 1/1 [00:16<00:00, 16.46s/it]
+- Finish eval epoch 8, validation loss 0.030589
+- Best model
+
+- Training epoch 9
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.027287:   0%|          | 0/1 [00:16<?, ?it/s]Generating video:   0%|          | 0/1 [00:16<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:36<00:00, 36.78s/it]Generating video: 100%|██████████| 1/1 [00:36<00:00, 36.78s/it]
+- Finish training epoch 9, training loss 0.027287, pos loss 0.027287, group loss 0.000000
+- Evaluating epoch 9
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.022683:   0%|          | 0/1 [00:18<?, ?it/s]Generating video:   0%|          | 0/1 [00:18<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:38<00:00, 38.49s/it]Generating video: 100%|██████████| 1/1 [00:38<00:00, 38.49s/it]
+- Finish eval epoch 9, validation loss 0.022683
+- Best model
+
+- Training epoch 10
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.020319:   0%|          | 0/1 [00:17<?, ?it/s]Train loss 0.020319: 100%|██████████| 1/1 [00:17<00:00, 17.55s/it]Train loss 0.020319: 100%|██████████| 1/1 [00:17<00:00, 17.55s/it]
+- Finish training epoch 10, training loss 0.020319, pos loss 0.020319, group loss 0.000000
+- Evaluating epoch 10
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.017450:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.017450: 100%|██████████| 1/1 [00:17<00:00, 17.30s/it]Valid loss 0.017450: 100%|██████████| 1/1 [00:17<00:00, 17.30s/it]
+- Finish eval epoch 10, validation loss 0.017450
+- Best model
+
+- Training epoch 11
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.015718:   0%|          | 0/1 [00:19<?, ?it/s]Train loss 0.015718: 100%|██████████| 1/1 [00:19<00:00, 19.27s/it]Train loss 0.015718: 100%|██████████| 1/1 [00:19<00:00, 19.27s/it]
+- Finish training epoch 11, training loss 0.015718, pos loss 0.015718, group loss 0.000000
+- Evaluating epoch 11
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.013892:   0%|          | 0/1 [00:16<?, ?it/s]Valid loss 0.013892: 100%|██████████| 1/1 [00:16<00:00, 16.93s/it]Valid loss 0.013892: 100%|██████████| 1/1 [00:16<00:00, 16.93s/it]
+- Finish eval epoch 11, validation loss 0.013892
+- Best model
+
+- Training epoch 12
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.011864:   0%|          | 0/1 [00:18<?, ?it/s]Train loss 0.011864: 100%|██████████| 1/1 [00:18<00:00, 18.64s/it]Train loss 0.011864: 100%|██████████| 1/1 [00:18<00:00, 18.64s/it]
+- Finish training epoch 12, training loss 0.011864, pos loss 0.011864, group loss 0.000000
+- Evaluating epoch 12
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.009642:   0%|          | 0/1 [00:19<?, ?it/s]Valid loss 0.009642: 100%|██████████| 1/1 [00:19<00:00, 19.23s/it]Valid loss 0.009642: 100%|██████████| 1/1 [00:19<00:00, 19.23s/it]
+- Finish eval epoch 12, validation loss 0.009642
+- Best model
+
+- Training epoch 13
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.008850:   0%|          | 0/1 [00:19<?, ?it/s]Train loss 0.008850: 100%|██████████| 1/1 [00:19<00:00, 19.54s/it]Train loss 0.008850: 100%|██████████| 1/1 [00:19<00:00, 19.54s/it]
+- Finish training epoch 13, training loss 0.008850, pos loss 0.008850, group loss 0.000000
+- Evaluating epoch 13
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.006980:   0%|          | 0/1 [00:16<?, ?it/s]Valid loss 0.006980: 100%|██████████| 1/1 [00:16<00:00, 16.63s/it]Valid loss 0.006980: 100%|██████████| 1/1 [00:16<00:00, 16.63s/it]
+- Finish eval epoch 13, validation loss 0.006980
+- Best model
+
+- Training epoch 14
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.006870:   0%|          | 0/1 [00:18<?, ?it/s]Generating video:   0%|          | 0/1 [00:18<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:38<00:00, 38.85s/it]Generating video: 100%|██████████| 1/1 [00:38<00:00, 38.85s/it]
+- Finish training epoch 14, training loss 0.006870, pos loss 0.006870, group loss 0.000000
+- Evaluating epoch 14
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.006180:   0%|          | 0/1 [00:16<?, ?it/s]Generating video:   0%|          | 0/1 [00:16<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:37<00:00, 37.19s/it]Generating video: 100%|██████████| 1/1 [00:37<00:00, 37.19s/it]
+- Finish eval epoch 14, validation loss 0.006180
+- Best model
+
+- Training epoch 15
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.005669:   0%|          | 0/1 [00:19<?, ?it/s]Train loss 0.005669: 100%|██████████| 1/1 [00:19<00:00, 19.21s/it]Train loss 0.005669: 100%|██████████| 1/1 [00:19<00:00, 19.21s/it]
+- Finish training epoch 15, training loss 0.005669, pos loss 0.005669, group loss 0.000000
+- Evaluating epoch 15
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.004831:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.004831: 100%|██████████| 1/1 [00:18<00:00, 18.15s/it]Valid loss 0.004831: 100%|██████████| 1/1 [00:18<00:00, 18.15s/it]
+- Finish eval epoch 15, validation loss 0.004831
+- Best model
+
+- Training epoch 16
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.005014:   0%|          | 0/1 [00:19<?, ?it/s]Train loss 0.005014: 100%|██████████| 1/1 [00:19<00:00, 19.02s/it]Train loss 0.005014: 100%|██████████| 1/1 [00:19<00:00, 19.02s/it]
+- Finish training epoch 16, training loss 0.005014, pos loss 0.005014, group loss 0.000000
+- Evaluating epoch 16
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.004755:   0%|          | 0/1 [00:16<?, ?it/s]Valid loss 0.004755: 100%|██████████| 1/1 [00:16<00:00, 16.42s/it]Valid loss 0.004755: 100%|██████████| 1/1 [00:16<00:00, 16.42s/it]
+- Finish eval epoch 16, validation loss 0.004755
+- Best model
+
+- Training epoch 17
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.004778:   0%|          | 0/1 [00:18<?, ?it/s]Train loss 0.004778: 100%|██████████| 1/1 [00:18<00:00, 18.37s/it]Train loss 0.004778: 100%|██████████| 1/1 [00:18<00:00, 18.37s/it]
+- Finish training epoch 17, training loss 0.004778, pos loss 0.004778, group loss 0.000000
+- Evaluating epoch 17
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.005278:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.005278: 100%|██████████| 1/1 [00:18<00:00, 18.97s/it]Valid loss 0.005278: 100%|██████████| 1/1 [00:18<00:00, 18.97s/it]
+- Finish eval epoch 17, validation loss 0.005278
+
+- Training epoch 18
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.004444:   0%|          | 0/1 [00:18<?, ?it/s]Train loss 0.004444: 100%|██████████| 1/1 [00:18<00:00, 18.52s/it]Train loss 0.004444: 100%|██████████| 1/1 [00:18<00:00, 18.52s/it]
+- Finish training epoch 18, training loss 0.004444, pos loss 0.004444, group loss 0.000000
+- Evaluating epoch 18
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.003763:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.003763: 100%|██████████| 1/1 [00:17<00:00, 17.30s/it]Valid loss 0.003763: 100%|██████████| 1/1 [00:17<00:00, 17.30s/it]
+- Finish eval epoch 18, validation loss 0.003763
+- Best model
+
+- Training epoch 19
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.003959:   0%|          | 0/1 [00:18<?, ?it/s]Generating video:   0%|          | 0/1 [00:18<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:38<00:00, 38.43s/it]Generating video: 100%|██████████| 1/1 [00:38<00:00, 38.43s/it]
+- Finish training epoch 19, training loss 0.003959, pos loss 0.003959, group loss 0.000000
+- Evaluating epoch 19
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.002903:   0%|          | 0/1 [00:18<?, ?it/s]Generating video:   0%|          | 0/1 [00:18<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:39<00:00, 39.32s/it]Generating video: 100%|██████████| 1/1 [00:39<00:00, 39.32s/it]
+- Finish eval epoch 19, validation loss 0.002903
+- Best model
+
+- Training epoch 20
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.003441:   0%|          | 0/1 [00:18<?, ?it/s]Train loss 0.003441: 100%|██████████| 1/1 [00:18<00:00, 18.50s/it]Train loss 0.003441: 100%|██████████| 1/1 [00:18<00:00, 18.50s/it]
+- Finish training epoch 20, training loss 0.003441, pos loss 0.003441, group loss 0.000000
+- Evaluating epoch 20
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.003050:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.003050: 100%|██████████| 1/1 [00:17<00:00, 17.89s/it]Valid loss 0.003050: 100%|██████████| 1/1 [00:17<00:00, 17.89s/it]
+- Finish eval epoch 20, validation loss 0.003050
+
+- Training epoch 21
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.004032:   0%|          | 0/1 [00:18<?, ?it/s]Train loss 0.004032: 100%|██████████| 1/1 [00:18<00:00, 18.54s/it]Train loss 0.004032: 100%|██████████| 1/1 [00:18<00:00, 18.54s/it]
+- Finish training epoch 21, training loss 0.004032, pos loss 0.004032, group loss 0.000000
+- Evaluating epoch 21
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.004654:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.004654: 100%|██████████| 1/1 [00:18<00:00, 18.57s/it]Valid loss 0.004654: 100%|██████████| 1/1 [00:18<00:00, 18.57s/it]
+- Finish eval epoch 21, validation loss 0.004654
+
+- Training epoch 22
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.004032:   0%|          | 0/1 [00:16<?, ?it/s]Train loss 0.004032: 100%|██████████| 1/1 [00:16<00:00, 16.38s/it]Train loss 0.004032: 100%|██████████| 1/1 [00:16<00:00, 16.38s/it]
+- Finish training epoch 22, training loss 0.004032, pos loss 0.004032, group loss 0.000000
+- Evaluating epoch 22
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.003038:   0%|          | 0/1 [00:11<?, ?it/s]Valid loss 0.003038: 100%|██████████| 1/1 [00:11<00:00, 11.24s/it]Valid loss 0.003038: 100%|██████████| 1/1 [00:11<00:00, 11.24s/it]
+- Finish eval epoch 22, validation loss 0.003038
+
+- Training epoch 23
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.003393:   0%|          | 0/1 [00:19<?, ?it/s]Train loss 0.003393: 100%|██████████| 1/1 [00:19<00:00, 19.66s/it]Train loss 0.003393: 100%|██████████| 1/1 [00:19<00:00, 19.66s/it]
+- Finish training epoch 23, training loss 0.003393, pos loss 0.003393, group loss 0.000000
+- Evaluating epoch 23
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.003340:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.003340: 100%|██████████| 1/1 [00:18<00:00, 18.22s/it]Valid loss 0.003340: 100%|██████████| 1/1 [00:18<00:00, 18.22s/it]
+- Finish eval epoch 23, validation loss 0.003340
+
+- Training epoch 24
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.002962:   0%|          | 0/1 [00:18<?, ?it/s]Generating video:   0%|          | 0/1 [00:18<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:38<00:00, 38.93s/it]Generating video: 100%|██████████| 1/1 [00:38<00:00, 38.93s/it]
+- Finish training epoch 24, training loss 0.002962, pos loss 0.002962, group loss 0.000000
+- Evaluating epoch 24
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.002925:   0%|          | 0/1 [00:18<?, ?it/s]Generating video:   0%|          | 0/1 [00:18<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:39<00:00, 39.41s/it]Generating video: 100%|██████████| 1/1 [00:39<00:00, 39.41s/it]
+- Finish eval epoch 24, validation loss 0.002925
+
+- Training epoch 25
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.003269:   0%|          | 0/1 [00:17<?, ?it/s]Train loss 0.003269: 100%|██████████| 1/1 [00:17<00:00, 17.51s/it]Train loss 0.003269: 100%|██████████| 1/1 [00:17<00:00, 17.51s/it]
+- Finish training epoch 25, training loss 0.003269, pos loss 0.003269, group loss 0.000000
+- Evaluating epoch 25
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.005530:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.005530: 100%|██████████| 1/1 [00:18<00:00, 18.38s/it]Valid loss 0.005530: 100%|██████████| 1/1 [00:18<00:00, 18.38s/it]
+- Finish eval epoch 25, validation loss 0.005530
+
+- Training epoch 26
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.002935:   0%|          | 0/1 [00:18<?, ?it/s]Train loss 0.002935: 100%|██████████| 1/1 [00:18<00:00, 18.28s/it]Train loss 0.002935: 100%|██████████| 1/1 [00:18<00:00, 18.28s/it]
+- Finish training epoch 26, training loss 0.002935, pos loss 0.002935, group loss 0.000000
+- Evaluating epoch 26
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.002277:   0%|          | 0/1 [00:18<?, ?it/s]Valid loss 0.002277: 100%|██████████| 1/1 [00:18<00:00, 18.63s/it]Valid loss 0.002277: 100%|██████████| 1/1 [00:18<00:00, 18.63s/it]
+- Finish eval epoch 26, validation loss 0.002277
+- Best model
+
+- Training epoch 27
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.002332:   0%|          | 0/1 [00:16<?, ?it/s]Train loss 0.002332: 100%|██████████| 1/1 [00:16<00:00, 16.92s/it]Train loss 0.002332: 100%|██████████| 1/1 [00:16<00:00, 16.92s/it]
+- Finish training epoch 27, training loss 0.002332, pos loss 0.002332, group loss 0.000000
+- Evaluating epoch 27
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.002114:   0%|          | 0/1 [00:19<?, ?it/s]Valid loss 0.002114: 100%|██████████| 1/1 [00:19<00:00, 19.25s/it]Valid loss 0.002114: 100%|██████████| 1/1 [00:19<00:00, 19.25s/it]
+- Finish eval epoch 27, validation loss 0.002114
+- Best model
+
+- Training epoch 28
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.002555:   0%|          | 0/1 [00:18<?, ?it/s]Train loss 0.002555: 100%|██████████| 1/1 [00:18<00:00, 18.83s/it]Train loss 0.002555: 100%|██████████| 1/1 [00:18<00:00, 18.83s/it]
+- Finish training epoch 28, training loss 0.002555, pos loss 0.002555, group loss 0.000000
+- Evaluating epoch 28
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.002210:   0%|          | 0/1 [00:17<?, ?it/s]Valid loss 0.002210: 100%|██████████| 1/1 [00:17<00:00, 17.22s/it]Valid loss 0.002210: 100%|██████████| 1/1 [00:17<00:00, 17.22s/it]
+- Finish eval epoch 28, validation loss 0.002210
+
+- Training epoch 29
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.002279:   0%|          | 0/1 [00:19<?, ?it/s]Generating video:   0%|          | 0/1 [00:19<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:39<00:00, 39.56s/it]Generating video: 100%|██████████| 1/1 [00:39<00:00, 39.56s/it]
+- Finish training epoch 29, training loss 0.002279, pos loss 0.002279, group loss 0.000000
+- Evaluating epoch 29
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.001815:   0%|          | 0/1 [00:17<?, ?it/s]Generating video:   0%|          | 0/1 [00:17<?, ?it/s]   Generating video: 100%|██████████| 1/1 [00:37<00:00, 37.52s/it]Generating video: 100%|██████████| 1/1 [00:37<00:00, 37.52s/it]
+- Finish eval epoch 29, validation loss 0.001815
+- Best model
+
+- Training epoch 30
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.002612:   0%|          | 0/1 [00:18<?, ?it/s]Train loss 0.002612: 100%|██████████| 1/1 [00:18<00:00, 18.69s/it]Train loss 0.002612: 100%|██████████| 1/1 [00:18<00:00, 18.69s/it]
+- Finish training epoch 30, training loss 0.002612, pos loss 0.002612, group loss 0.000000
+- Evaluating epoch 30
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.002177:   0%|          | 0/1 [00:20<?, ?it/s]Valid loss 0.002177: 100%|██████████| 1/1 [00:20<00:00, 20.37s/it]Valid loss 0.002177: 100%|██████████| 1/1 [00:20<00:00, 20.37s/it]
+- Finish eval epoch 30, validation loss 0.002177
+
+- Training epoch 31
+  0%|          | 0/1 [00:00<?, ?it/s]Train loss 0.002455:   0%|          | 0/1 [00:18<?, ?it/s]Train loss 0.002455: 100%|██████████| 1/1 [00:18<00:00, 18.06s/it]Train loss 0.002455: 100%|██████████| 1/1 [00:18<00:00, 18.06s/it]
+- Finish training epoch 31, training loss 0.002455, pos loss 0.002455, group loss 0.000000
+- Evaluating epoch 31
+  0%|          | 0/1 [00:00<?, ?it/s]Valid loss 0.002493:   0%|          | 0/1 [00:19<?, ?it/s]Valid loss 0.002493: 100%|██████████| 1/1 [00:19<00:00, 19.24s/it]Valid loss 0.002493: 100%|██████████| 1/1 [00:19<00:00, 19.24s/it]
+- Finish eval epoch 31, validation loss 0.002493
+
